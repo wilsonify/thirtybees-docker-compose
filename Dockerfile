@@ -35,5 +35,28 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 COPY ./www/thirtybees /var/www/thirtybees
 WORKDIR /var/www/thirtybees
 RUN COMPOSER=composer/php7.4/composer.json composer install
-ENTRYPOINT [ "php" ]
-CMD  [ "install-dev/index_cli.php", "--newsletter=1", "--language=en", "--country=us", "--db_name=thirtybees", "--db_create=1", "--name=thirtybees", "--email=test@thirty.bees", "--firstname=thirty", "--lastname=bees", "--password=thirtybees" ]
+RUN php install-dev/index_cli.php  \
+--activity=0 \
+--all_languages=0 \
+--base_uri=/  \
+--country=us  \
+--db_clear=1 \
+--db_create=1  \
+--db_name=thirtybees \
+--db_server=mysql \
+--db_user=thirtybees \
+--domain=localhost:9000  \
+--email=pub@thirtybees.com \
+--email=test@thirty.bees  \
+--engine=mariadb \
+--firstname=John \
+--language=en  \
+--lastname=bees  \
+--license==0 \
+--name=thirty-bees \
+--newsletter=1  \
+--password=thirtybees \
+--prefix=tb_ \
+--send_email=1 \
+--step=all \
+--timezone=US/Eastern
