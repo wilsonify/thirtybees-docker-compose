@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity_contact>
+  <fields id="name" class="Contact">
+    <field name="customer_service"/>
+    <field name="active"/>
+  </fields>
+  <entities>
+    <contact id="Webmaster" customer_service="1" active="1"/>
+    <contact id="Customer_service" customer_service="1" active="1"/>
+  </entities>
+</entity_contact>

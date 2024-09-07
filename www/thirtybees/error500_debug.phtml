@@ -1,0 +1,369 @@
+<?php
+/**
+ * @var \Thirtybees\Core\Error\ErrorDescription $errorDescription
+ * @var \Thirtybees\Core\Error\Response\DebugErrorPage $helper
+ */
+?>
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Error: <?= $helper->displayString($errorDescription->getMessage()) ?></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="description" content="This store is powered by thirty bees." />
+        <style>
+            html {
+                padding: 0;
+                margin: 0;
+                font-size: 16px;
+                line-height: 1.4;
+                color: #222;
+                background: white;
+            }
+
+            body {
+                padding: 0;
+                margin: 0;
+                font-size: 14px;
+                font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            }
+
+            .header {
+                background-color: #f6d426;
+                color: black;
+                padding: 10px 25px;
+            }
+
+            .footer {
+                background-color: #f6d426;
+                color: black;
+                padding: 10px 25px;
+            }
+
+            .type {
+                margin: 1em 0;
+                color: #444;
+            }
+
+            .subtype {
+                margin: 0;
+                color: #444;
+            }
+
+            .header h1 {
+                font-size: 170%;
+                font-weight: bold;
+                margin: 0.5em 0;
+            }
+
+            h2 {
+                margin: 25px 0 0 0;
+                color: #F20000;
+            }
+
+            p {
+                padding-left: 20px;
+            }
+
+            ul li {
+                margin-bottom: 10px;
+            }
+
+            a {
+                font-size: 14px;
+                color: blue;
+                font-weight: bold;
+                cursor: pointer;
+            }
+
+            pre {
+                background-color: #FDF5CE;
+                color: #111;
+                padding: 5px;
+                font-size: 12px;
+                line-height: 1.5;
+                font-family: Consolas, monospace;
+                width: 99%;
+                overflow-x: auto;
+                margin: 12px 0;
+            }
+
+            .panel {
+                padding: 1px 25px;
+            }
+
+            .stacktrace {
+                margin: 12px 0;
+                background: #F4F3F1;
+                padding: .1em 1em 1em;
+                border-radius: 8px;
+            }
+
+            .stacktrace-header {
+                margin: .8em 0;
+            }
+
+            .suppressed {
+                font-size: 80%;
+                color: #bbb;
+            }
+
+            .suppressed a {
+                color: #888;
+                font-weight: normal;
+            }
+
+            .stacktrace-file {
+                border-bottom: 1px dotted rgba(0, 0, 0, .3);
+            }
+
+            .arguments pre{
+                background-color: #F1FDFE;
+            }
+
+            .collapsed {
+                display: none;
+            }
+
+            .selected {
+                background: #CD1818;
+                color: white;
+                font-weight: bold;
+                font-style: normal;
+                display: block;
+                padding: 0 .4em;
+                margin: 0 -.4em;
+            }
+
+            .line {
+                display: inline-block;
+                width: 100px;
+                color: #9F9C7F;
+            }
+
+            .selected .line {
+                color: white;
+            }
+
+            .trace-args {
+                border-collapse: collapse;
+                width: 100%;
+                background: #FDF5CE;
+                padding: .4em .7em;
+                border: 1px dotted silver;
+                overflow: auto;
+                font-size: 12px;
+                line-height: 1.5;
+                font-family: Consolas, monospace;
+            }
+
+            .trace-args td:first-child {
+               width: 20%;
+                font-weight: bold;
+            }
+
+            .trace-args td {
+                vertical-align: top;
+                text-align: left;
+                padding: 2px 6px;
+                border: 1px solid #e6dfbf;
+            }
+
+            .trace-args pre {
+                margin: 0;
+                padding: 0;
+            }
+
+            [data-toggle] {
+                cursor: pointer;
+                color: #328ADC;
+            }
+            [data-toggle].opened:after {
+                content: " ▼";
+                opacity: 0.5;
+
+            }
+            [data-toggle].closed:after {
+                content: " ►";
+                opacity: 0.5;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="header">
+            <span class="type"><?= $helper->displayString($errorDescription->getErrorName()) ?></span>
+            <h1><?= $helper->displayString($errorDescription->getMessage()) ?></h1>
+            <div class="subtype">
+                <?php
+                    if ($errorDescription->getSourceType() === 'smarty') {
+                        echo "when rendering smarty template <b>" . $helper->displayFilePath($errorDescription->getSourceFile()) . "</b>";
+                        if ($errorDescription->getRealSourceFile() != $errorDescription->getSourceFile()) {
+                            echo "<br/>";
+                            echo "compiled file <b>".$helper->displayFilePath($errorDescription->getRealSourceFile())."</b> at line <b>".$errorDescription->getRealSourceLine()."</b>";
+                        }
+                    } else {
+                        echo "in file <b>" . $helper->displayFilePath($errorDescription->getSourceFile()) . "</b> at line <b>{$errorDescription->getSourceLine()}</b>";
+                    }
+                ?>
+            </div>
+        </div>
+
+        <?php foreach ($errorDescription->getExtraSections() as $id => $section) { ?>
+        <div class="panel">
+            <h2 data-toggle="extra-section-<?= $id ?>" class="opened"><?= $helper->displayString($section['label'] ?? 'Unnamed section') ?></h2>
+            <div id="extra-section-<?= $id ?>" class="collapsible">
+                <pre><?= $helper->displayString($section['content'] ?? 'No information') ?></pre>
+            </div>
+        </div>
+        <?php } ?>
+
+        <?php if ($errorDescription->hasSourceFileContent()) { ?>
+        <div class="panel">
+            <h2 data-toggle="main-source" class="opened">Source file: <?= $helper->displayFilePath($errorDescription->getSourceFile()) ?></h2>
+            <div id="main-source" class="collapsible">
+                <?= $helper->displayLines($errorDescription->getSourceFileContent()) ?>
+            </div>
+        </div>
+        <?php } ?>
+
+        <?php if ($errorDescription->hasRealSourceFileContent()) { ?>
+            <div class="panel">
+                <h2 data-toggle="real-source" class="opened">Compiled file: <?= $helper->displayFilePath($errorDescription->getRealSourceFile()) ?></h2>
+                <div id="real-source" class="collapsible">
+                    <?= $helper->displayLines($errorDescription->getRealSourceFileContent()) ?>
+                </div>
+            </div>
+        <?php } ?>
+
+
+        <div class="panel">
+            <h2 data-toggle="stack-trace" class="closed">Stack trace</h2>
+            <div id="stack-trace" class="collapsed stacktrace">
+                <?php foreach ($errorDescription->getStackTrace() as $traceId => $trace) { ?>
+                <div>
+                    <div class="stacktrace-header <?= (isset($trace['suppressed']) && $trace['suppressed']) ? 'suppressed' : '' ?>">
+                        <span class="line"><?= $traceId+1 ?>.</span>
+                        <span class="stacktrace-file">
+                            <?php
+                                if (isset($trace['fileName']) && $trace['fileName']) {
+                                    echo $helper->displayFilePath(dirname($trace['fileName'])) . '/';
+                                    echo '<b>' . $helper->displayString(basename($trace['fileName'])) . '</b>';
+                                }
+                                if (isset($trace['line']) && $trace['line']) {
+                                    echo ':' . $helper->displayString($trace['line']);
+                                }
+                            ?>
+                        </span>
+                        <?php if (isset($trace['fileContent']) && $trace['fileContent'])  { ?>
+                        <a data-toggle="trace-<?= $traceId ?>" class="closed">source</a>
+                        <?php } ?>
+                        <?php
+                            if (isset($trace['description']) && $trace['description']) {
+                                echo $helper->displayString($trace['description']);
+                            } else {
+                                if (isset($trace['class']) && $trace['class']) {
+                                    echo $trace['class'];
+                                }
+                                if (isset($trace['type']) && $trace['type']) {
+                                    echo $trace['type'];
+                                }
+                                if (isset($trace['function']) && $trace['function']) {
+                                    echo $trace['function'];
+                                }
+                                echo '(';
+                                if (isset($trace['args']) && $trace['args']) {
+                                    echo '<a data-toggle="trace-args-' . $traceId . '" class="closed">arguments</a>';
+                                }
+                                echo ')';
+                            }
+                        ?>
+                    </div>
+                    <div id="trace-<?= $traceId ?>" class="collapsed">
+                        <?= $helper->displayLines($trace['fileContent'] ?? []) ?>
+                    </div>
+                    <?php if (isset($trace['args']) && $trace['args']) { ?>
+                     <div id="trace-args-<?= $traceId ?>" class="collapsed">
+                         <table class="trace-args">
+                             <?php foreach ($trace['args'] as $argName => $arg) {  ?>
+                                 <tr>
+                                     <td>#<?= $argName+1 ?></td>
+                                     <td><pre><?= $helper->displayString($arg) ?></pre></td>
+                                 </tr>
+                            <?php } ?>
+                         </table>
+                    </div>
+                    <?php } ?>
+                </div>
+                <?php } ?>
+            </div>
+        </div>
+
+        <?php if ($errorDescription->hasCause()) { ?>
+        <div class="panel">
+            <h2 data-toggle="cause-trace" class="closed">Caused by</h2>
+            <div id="cause-trace" class="collapsed stacktrace">
+                <?php
+                    $prevCnt = 1;
+                    /** @var \Thirtybees\Core\Error\ErrorDescription $previous */
+                    $previous = $errorDescription->getCause();
+                    while ($previous) {
+                ?>
+                    <div>
+                        <div class="stacktrace-header">
+                            <span class="line">Caused by</span>
+                            <span class="stacktrace-file">
+                                <i><?= $previous->getErrorName() ?></i>: <b><?= $helper->displayString($previous->getMessage()) ?></b>
+                                <?php
+                                if ($previous->getSourceType() === 'smarty') {
+                                    echo " when rendering smarty template <b>". $helper->displayFilePath($previous->getSourceFile()) ."</b>";
+                                } else {
+                                    echo " in file <b>" . $helper->displayFilePath($previous->getSourceFile()) ."</b> at line <b>{$previous->getSourceLine()}</b>";
+                                }
+                                ?>
+                            </span>
+                            <?php if ($previous->hasSourceFileContent()) { ?>
+                                &nbsp;
+                                <a data-toggle="previous-<?= $prevCnt ?>-source" class="closed">Source</a>
+                                <div class="panel">
+                                    <div id="previous-<?= $prevCnt ?>-source" class="collapsed">
+                                        <?= $helper->displayLines($previous->getSourceFileContent()) ?>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+                    </div>
+                    <?php
+                        $prevCnt++;
+                        $previous = $previous->getCause();
+                    }
+                    ?>
+            </div>
+        </div>
+        <?php } ?>
+
+        <br />
+
+        <div class="footer">
+            <span>PHP version: <b><?= $helper->displayString($errorDescription->getPhpVersion()) ?></b>.</span>&nbsp;
+            <span>Code revision: <b><?= $helper->displayString($errorDescription->getCodeRevision()) ?></b> build for PHP <b><?= $helper->displayString($errorDescription->getCodeBuildFor()) ?></b></span>
+        </div>
+
+        <script type="text/javascript">
+            document.querySelectorAll('[data-toggle]').forEach(function (el) {
+                var targetId = el.getAttribute('data-toggle');
+                var target = document.getElementById(targetId);
+                el.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    if (el.classList.contains('closed')) {
+                        target.style.display = 'block';
+                        el.classList.remove('closed');
+                        el.classList.add('opened');
+                    } else {
+                        target.style.display = 'none';
+                        el.classList.add('closed');
+                        el.classList.remove('opened');
+                    }
+                })
+            })
+        </script>
+    </body>
+</html>
