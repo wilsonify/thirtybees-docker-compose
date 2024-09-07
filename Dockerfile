@@ -1,4 +1,6 @@
-FROM php:7.4-fpm
+FROM php:7.4-fpm AS phpbuild
+
+# Install necessary dependencies
 RUN apt-get update && apt-get install -y  \
     git \
     unzip \
@@ -13,15 +15,18 @@ RUN apt-get update && apt-get install -y  \
     libkrb5-dev \
     libmemcached-dev \
     zlib1g-dev \
-    libonig-dev
+    libonig-dev \
+    nginx \
+    supervisor  # Added supervisor for process management
 
-
+# PHP extensions
 RUN docker-php-ext-install -j$(nproc) iconv curl bcmath xml json zip pdo_mysql mbstring
 RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
 RUN docker-php-ext-install -j$(nproc) imap
 RUN docker-php-ext-configure gd
 RUN docker-php-ext-install -j$(nproc) gd
 
+# Install memcached PHP extension
 RUN git clone https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached
 RUN docker-php-ext-configure /usr/src/php/ext/memcached --disable-memcached-sasl
 RUN docker-php-ext-install /usr/src/php/ext/memcached
@@ -32,9 +37,14 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
     && php -r "unlink('composer-setup.php');"
 
-COPY ./www/thirtybees /var/www/thirtybees
-WORKDIR /var/www/thirtybees
+# Copy and set up the web application
+COPY ./www/thirtybees /var/www
+WORKDIR /var/www
+
+# Install dependencies using Composer
 RUN COMPOSER=composer/php7.4/composer.json composer install
+
+# Run installation script
 RUN php install-dev/index_cli.php  \
 --activity=0 \
 --all_languages=0 \
@@ -60,3 +70,16 @@ RUN php install-dev/index_cli.php  \
 --send_email=1 \
 --step=all \
 --timezone=US/Eastern
+
+# Nginx configuration
+COPY default.conf /etc/nginx/conf.d/default.conf
+
+# Supervisord configuration to run Nginx and PHP-FPM in the same container
+RUN mkdir -p /etc/supervisor/conf.d
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Expose port 80 for Nginx
+EXPOSE 80
+
+# Start supervisor to manage both PHP-FPM and Nginx
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
