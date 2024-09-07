@@ -16,15 +16,26 @@ RUN apt-get update && apt-get install -y  \
     libmemcached-dev \
     zlib1g-dev \
     libonig-dev \
+    libicu-dev \
     nginx \
-    supervisor  # Added supervisor for process management
+    supervisor
 
 # PHP extensions
-RUN docker-php-ext-install -j$(nproc) iconv curl bcmath xml json zip pdo_mysql mbstring
 RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
-RUN docker-php-ext-install -j$(nproc) imap
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install -j$(nproc) gd
+RUN docker-php-ext-install -j$(nproc) \
+    iconv  \
+    curl  \
+    bcmath  \
+    xml  \
+    json  \
+    zip  \
+    pdo_mysql  \
+    mbstring  \
+    imap  \
+    gd  \
+    intl  \
+    soap
 
 # Install memcached PHP extension
 RUN git clone https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached
@@ -75,8 +86,6 @@ RUN php install-dev/index_cli.php  \
 
 # Expose port 80 for Nginx
 EXPOSE 80
-
-
 
 # Start supervisor to manage both PHP-FPM and Nginx
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
