@@ -41,7 +41,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 COPY default.conf /etc/nginx/conf.d/default.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY ./www/thirtybees /var/www/thirtybees
-WORKDIR /var/www
+WORKDIR /var/www/thirtybees
 
 # Install thirtybees
 RUN COMPOSER=composer/php7.4/composer.json composer install
