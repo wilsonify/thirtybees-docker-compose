@@ -37,14 +37,14 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
     && php composer-setup.php --install-dir=/usr/local/bin --filename=composer \
     && php -r "unlink('composer-setup.php');"
 
-# Copy and set up the web application
-COPY ./www/thirtybees /var/www
+# bootstrap files
+COPY default.conf /etc/nginx/conf.d/default.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY ./www/thirtybees /var/www/thirtybees
 WORKDIR /var/www
 
-# Install dependencies using Composer
+# Install thirtybees
 RUN COMPOSER=composer/php7.4/composer.json composer install
-
-# Run installation script
 RUN php install-dev/index_cli.php  \
 --activity=0 \
 --all_languages=0 \
@@ -70,13 +70,6 @@ RUN php install-dev/index_cli.php  \
 --send_email=1 \
 --step=all \
 --timezone=US/Eastern
-
-# Nginx configuration
-COPY default.conf /etc/nginx/conf.d/default.conf
-
-# Supervisord configuration to run Nginx and PHP-FPM in the same container
-RUN mkdir -p /etc/supervisor/conf.d
-COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Expose port 80 for Nginx
 EXPOSE 80
