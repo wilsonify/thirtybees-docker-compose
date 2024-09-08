@@ -22,3 +22,8 @@ services:
       - mysql
       - memcached
     restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
