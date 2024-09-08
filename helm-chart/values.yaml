@@ -1,0 +1,17 @@
+memcached:
+  image: "memcached:1.6.29"
+  replicaCount: 1
+
+mariadb:
+  image: "mariadb:11.4.3"
+  replicaCount: 1
+  mariadbDatabase: thirtybees
+  mariadbUser: thirtybees
+  mariadbPassword: thirtybees
+  mariadbRootPassword: root
+
+thirtybees:
+  image: "ghcr.io/wilsonify/thirtybees:1.0.0"
+  replicaCount: 1
+  port: 80
+  hostPort: 32080

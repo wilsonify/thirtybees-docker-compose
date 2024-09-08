@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thirtybees
+spec:
+  replicas: {{ .Values.thirtybees.replicaCount }}
+  selector:
+    matchLabels:
+      app: thirtybees
+  template:
+    metadata:
+      labels:
+        app: thirtybees
+    spec:
+      containers:
+        - name: thirtybees
+          image: "{{ .Values.thirtybees.image }}"
+          ports:
+            - containerPort: {{ .Values.thirtybees.port }}
+          env:
+            - name: DB_HOST
+              value: "mariadb"
+          dependsOn:
+            - memcached
+            - mariadb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: thirtybees
+spec:
+  type: NodePort
+  ports:
+    - port: {{ .Values.thirtybees.port }}
+      nodePort: {{ .Values.thirtybees.hostPort }}
+  selector:
+    app: thirtybees

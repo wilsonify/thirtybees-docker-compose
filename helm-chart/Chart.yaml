@@ -1,0 +1,5 @@
+apiVersion: v2
+name: thirtybees-stack
+description: A Helm chart for thirtybees, memcached, and MariaDB
+version: 0.1.0
+appVersion: "1.0.0"
