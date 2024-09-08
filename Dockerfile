@@ -67,7 +67,6 @@ RUN php install-dev/index_cli.php  \
 --db_user=thirtybees \
 --domain=localhost:9000  \
 --email=pub@thirtybees.com \
---email=test@thirty.bees  \
 --engine=mariadb \
 --firstname=John \
 --language=en  \
