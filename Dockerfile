@@ -1,4 +1,4 @@
-FROM php:7.4-fpm AS phpbuild
+FROM php:8.3-fpm AS phpbuild
 
 # Install necessary dependencies
 RUN apt-get update && apt-get install -y  \
@@ -21,21 +21,18 @@ RUN apt-get update && apt-get install -y  \
     supervisor
 
 # PHP extensions
-RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg
-RUN docker-php-ext-install -j$(nproc) \
-    iconv  \
-    curl  \
-    bcmath  \
-    xml  \
-    json  \
-    zip  \
-    pdo_mysql  \
-    mbstring  \
-    imap  \
-    gd  \
-    intl  \
-    soap
+RUN docker-php-ext-install -j$(nproc) bcmath
+RUN docker-php-ext-install -j$(nproc) curl
+RUN docker-php-ext-configure gd --with-freetype --with-jpeg && docker-php-ext-install -j$(nproc) gd
+RUN docker-php-ext-install -j$(nproc) iconv
+RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl && docker-php-ext-install -j$(nproc) imap
+RUN docker-php-ext-install -j$(nproc) intl
+
+RUN docker-php-ext-install -j$(nproc) mbstring
+RUN docker-php-ext-install -j$(nproc) pdo_mysql
+RUN docker-php-ext-install -j$(nproc) soap
+RUN docker-php-ext-install -j$(nproc) xml
+RUN docker-php-ext-install -j$(nproc) zip
 
 # Install memcached PHP extension
 RUN git clone https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached
@@ -57,7 +54,7 @@ RUN chown -R www-data:www-data /var/www/default
 RUN chmod -R 755 /var/www/default
 
 # Install thirtybees
-RUN COMPOSER=composer/php7.4/composer.json composer install
+RUN COMPOSER=composer/php8.3/composer.json composer install
 RUN php install-dev/index_cli.php  \
 --activity=0 \
 --all_languages=0 \
