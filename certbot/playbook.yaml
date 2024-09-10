@@ -1,0 +1,80 @@
+---
+- name: Install Let's Encrypt Certbot using Python venv
+  hosts: webservers
+  become: yes
+  tasks:
+    - name: Update package index (APT-based systems)
+      apt:
+        update_cache: yes
+      when: ansible_facts['os_family'] == 'Debian'
+
+    - name: Install system dependencies (APT-based systems)
+      when: ansible_facts['os_family'] == 'Debian'
+      apt:
+        name:
+          - python3
+          - python3-venv
+          - libaugeas0
+        state: present
+
+
+    - name: Update package index (RPM-based systems)
+      when: ansible_facts['os_family'] == 'RedHat'
+      yum:
+        name: '*'
+        update_cache: yes
+
+    - name: Install system dependencies (RPM-based systems)
+      when: ansible_facts['os_family'] == 'RedHat'
+      yum:
+        name:
+          - python3
+          - augeas-libs
+        state: present
+
+    - name: Remove old Certbot packages (Debian)
+      when: ansible_facts['os_family'] == 'Debian'
+      apt:
+        name: certbot
+        state: absent
+
+
+    - name: Remove old Certbot packages (RedHat)
+      when: ansible_facts['os_family'] == 'RedHat'
+      yum:
+        name: certbot
+        state: absent
+
+    - name: Create virtual environment for Certbot
+      command: python3 -m venv /opt/certbot/
+      args:
+        creates: /opt/certbot/bin/activate
+
+    - name: Upgrade pip in virtual environment
+      command: /opt/certbot/bin/python -m pip install --upgrade pip
+
+    - name: Install Certbot in virtual environment
+      command: /opt/certbot/bin/python -m pip install certbot certbot-nginx
+
+    - name: Create symlink for Certbot command
+      file:
+        src: /opt/certbot/bin/certbot
+        dest: /usr/bin/certbot
+        state: link
+
+    - name: Obtain and install SSL certificate via Certbot for Nginx
+      command: certbot --nginx --non-interactive --agree-tos -m your-email@example.com -d yourwebsite.com
+      notify:
+        - Restart Nginx
+
+    - name: Set up automatic Certbot renewal
+      cron:
+        name: "Renew Let's Encrypt certificates"
+        special_time: "monthly"
+        job: "/opt/certbot/bin/python -c 'import random; import time; time.sleep(random.random() * 3600)' && certbot renew -q"
+
+  handlers:
+    - name: Restart Nginx
+      service:
+        name: nginx
+        state: restarted
