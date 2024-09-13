@@ -48,7 +48,7 @@ composer.dev.lock
 
 # Themes, modules and overrides
 
-/modules/*
+
 /override/*
 /themes/*
 !/themes/.htaccess
