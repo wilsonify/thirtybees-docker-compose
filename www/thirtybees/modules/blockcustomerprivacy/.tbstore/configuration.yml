@@ -1,0 +1,21 @@
+module_name: Block Customer Privacy
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - front office
+  - fraud
+  - privacy
+  - blockcustomerprivacy
+description_short: This block allows you to add information to your site letting customers know about your privacy protractions.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: false
+license: AFL
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

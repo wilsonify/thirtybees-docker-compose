@@ -1,0 +1,21 @@
+module_name: Bees Blog
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - blog
+  - blog module
+  - bees blog
+  - beesblog
+description_short: bees blog is the official thirty bees blog module that comes standard with all thirty bees installations allowing you to make blog posts from your shop.
+description: description.md
+images:
+  - image-1.png
+  - image-2.png
+gdpr_compliant: true
+license: MIT
+php_version:
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

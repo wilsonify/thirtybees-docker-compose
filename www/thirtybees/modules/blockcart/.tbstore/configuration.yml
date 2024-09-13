@@ -1,0 +1,20 @@
+module_name: Block Cart
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - cart
+  - add to cart
+  - blockcart
+description_short: The block cart module is the module in thirty bees that allows users to add products to the cart. This is a standard module.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: true
+license: MIT
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

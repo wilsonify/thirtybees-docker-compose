@@ -1,0 +1,1 @@
+The block layered module is also called the layered navigation module. It is used for filtering category pages using features, price, or attributes to filter. This module is a power addition to most sites that have a large number of products.

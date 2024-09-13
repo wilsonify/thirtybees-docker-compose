@@ -1,0 +1,22 @@
+module_name: Block My Account
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - account
+  - user account
+  - login
+  - my account
+  - blockmyaccount
+description_short: The block my account adds the login and account functionality for the front of the shop.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: false
+license: AFL
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

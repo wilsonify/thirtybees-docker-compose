@@ -1,0 +1,1 @@
+The block social module adds your company's social media accounts in the footer of your site. The module supports all major social media networks around the world and is included in all thirty bees installations.

@@ -1,0 +1,1 @@
+The block categories module from thirty bees is a module that is included with all thirty bees installations that adds a left or right column menu to of categories to your site making navigation easier for your customers.

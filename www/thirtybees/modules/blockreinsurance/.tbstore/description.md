@@ -1,0 +1,1 @@
+This module adds an information block on the product page. This block is customizable by the merchant and aimed at offering helpful additional information to reassure customers that your store is trustworthy. It can also be used for placing other static texts on the product page, of course.

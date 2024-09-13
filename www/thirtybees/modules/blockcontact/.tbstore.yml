@@ -1,0 +1,21 @@
+module_name: Block Contact
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - cms pages
+  - cms
+  - cms links
+  - blockcontact
+description_short: The block contact allows you to enter contact information for your site's customer service.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: false
+license: MIT
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

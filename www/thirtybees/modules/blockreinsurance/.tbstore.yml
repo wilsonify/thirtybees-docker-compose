@@ -1,0 +1,24 @@
+module_name: Block Customer Reassurance
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - reassurance
+  - confirmation
+  - info
+  - additional info
+  - text block
+  - product page
+  - blockreinsurance
+description_short: Adds an information block aimed at offering helpful information to reassure customers that your store is trustworthy.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: false
+license: AFL 3.0
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

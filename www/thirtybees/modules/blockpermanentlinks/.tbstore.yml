@@ -1,0 +1,22 @@
+module_name: Block Permanent Links
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - links
+  - permanent links
+  - menu
+  - link block
+  - blockpermanentlinks
+description_short: Adds a block which displays permanent links such as sitemap, contact, etc.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: false
+license: AFL 3.0
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

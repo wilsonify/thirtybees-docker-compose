@@ -1,0 +1,1 @@
+The block cart module comes with all thirty bees installations and allows users to add items to the cart. The template of this module is easily modified be each theme and can be hooked in different places.

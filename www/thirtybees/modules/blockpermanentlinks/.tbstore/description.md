@@ -1,0 +1,1 @@
+This module adds three permanent links, *contact*, *sitemap* and *bookmark*, right below the menu bar and provides hooks to add these links in various other places. With some HTML editing these links can be changed or extended.

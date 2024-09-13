@@ -1,0 +1,68 @@
+/**
+ * Copyright (C) 2017-2019 thirty bees
+ * Copyright (C) 2007-2016 PrestaShop SA
+ *
+ * thirty bees is an extension to the PrestaShop software by PrestaShop SA.
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Academic Free License (AFL 3.0)
+ * that is bundled with this package in the file LICENSE.md.
+ * It is also available through the world-wide-web at this URL:
+ * https://opensource.org/licenses/afl-3.0.php
+ * If you did not receive a copy of the license and are unable to
+ * obtain it through the world-wide-web, please send an email
+ * to license@thirtybees.com so we can send you a copy immediately.
+ *
+ * @author    thirty bees <modules@thirtybees.com>
+ * @author    PrestaShop SA <contact@prestashop.com>
+ * @copyright 2017-2019 thirty bees
+ * @copyright 2007-2016 PrestaShop SA
+ * @license   Academic Free License (AFL 3.0)
+ * PrestaShop is an internationally registered trademark of PrestaShop SA.
+ */
+
+/* SEND TO A FRIEND */
+#sendfriendpage form.std fieldset {
+	margin:0 0 20px 0;
+	padding: 10px 15px;
+	background: none repeat scroll 0 0 #eee
+}
+
+#sendfriendpage .product {}
+#sendfriendpage .product .img_link {float:left}
+#sendfriendpage .product .img_link img {
+	margin:0 10px 0 0;
+	border:1px solid #ccc;
+}
+#sendfriendpage .product .product_desc {
+	float:left;
+	width:200px;
+	font-weight:bold;
+	font-size:12px;
+	color:#000;
+}
+
+#sendfriendpage #send_friend_form_content {margin-top:40px}
+#sendfriendpage #send_friend_form_content .text {
+   padding-bottom: 10px
+}
+#sendfriendpage #send_friend_form_content .text label {
+   display: inline-block;
+   padding: 6px 15px;
+   width: 180px;
+   font-size: 12px;
+   text-align: right
+}
+#sendfriendpage #send_friend_form_content .text input {
+   padding: 0 5px;
+   height: 22px;
+   width: 260px;
+   border: 1px solid #ccc;
+   font-size: 12px
+}
+#sendfriendpage #send_friend_form_content .submit {
+	margin:0 20px 0 0;
+	padding:5px 0;
+	text-align:right
+}

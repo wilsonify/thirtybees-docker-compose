@@ -1,0 +1,10 @@
+.idea
+vendor
+/translations/*
+!/translations/index.php
+/mails/*
+!/mails/index.php
+!/mails/en/*
+config.xml
+config*.xml
+collectlogs-*.zip

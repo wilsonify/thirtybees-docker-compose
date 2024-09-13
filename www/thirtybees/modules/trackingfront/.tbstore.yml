@@ -1,0 +1,21 @@
+module_name: Tracking - Front Office
+compatible_versions: 1.0.0+
+author: thirty bees
+category: back office
+tags:
+  - affiliates
+  - statistics
+  - referrers
+  - trackingfront
+description_short: Enables your affiliates to access their own statistics. See Stats/Referrers.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: false
+license: AFL 3.0
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

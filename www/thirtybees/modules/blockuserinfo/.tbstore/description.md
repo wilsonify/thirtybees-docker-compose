@@ -1,0 +1,1 @@
+The block user info adds a login link to the top of your shop where customers can login. When customers are signed in it also displays their name as well. This module comes with all thirty bees installations.

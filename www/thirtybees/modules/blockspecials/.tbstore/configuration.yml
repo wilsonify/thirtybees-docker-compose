@@ -1,0 +1,22 @@
+module_name: Block Specials
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - sale
+  - specials
+  - discount
+  - marketing
+  - blockspecials
+description_short: The block specials module display products that are on sale in your shop.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: false
+license: AFL
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

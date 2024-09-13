@@ -1,0 +1,1 @@
+With the thirty bees bank wire module you can easily accept bank wire transactions for your customers. This module creates the order and displays the bank wire information to your customers on checkout, so they can use their bank to pay for your goods or services.

@@ -1,0 +1,20 @@
+[
+   {
+      "image": "sample-1.jpg",
+      "title": "Shop Tea",
+      "legend": "Shop Tea",
+      "description": "<h3 style=\"float:left;clear:both;font-size:30px;\">Shop Tea</h3><p style=\"text-align:center;margin-top:20px;\"><button class=\"btn btn-default\" type=\"button\">Shop now !</button></p>"
+   },
+   {
+      "image": "sample-2.jpg",
+      "title": "Soaps",
+      "legend": "Soaps",
+      "description": "<h3 style=\"float:left;clear:both;font-size:30px;\">View All Soaps</h3><p style=\"text-align:center;margin-top:20px;\"><button class=\"btn btn-default\" type=\"button\">Shop now !</button></p>"
+   },
+   {
+      "image": "sample-3.jpg",
+      "title": "Gifts",
+      "legend": "Gifts",
+      "description": "<h3 style=\"float:left;clear:both;font-size:30px;\">Shop Gifts</h3><p style=\"text-align:center;margin-top:20px;\"><button class=\"btn btn-default\" type=\"button\">Shop now !</button></p>"
+   }
+]

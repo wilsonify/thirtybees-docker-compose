@@ -1,0 +1,20 @@
+module_name: Product Tooltips
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - product page
+  - statistics
+  - producttooltip
+description_short: Shows information on a product page: how many people are viewing it, the last time it was sold and the last time it was added to a cart.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: false
+license: AFL 3.0
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

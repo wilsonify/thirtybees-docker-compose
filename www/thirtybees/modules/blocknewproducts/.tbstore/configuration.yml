@@ -1,0 +1,22 @@
+module_name: Block New Products
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - products
+  - marketing
+  - new products
+  - advertising
+  - blocknewproducts
+description_short: The block new products allows you to display new products to your customers.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: true
+license: AFL
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

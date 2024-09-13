@@ -1,0 +1,21 @@
+module_name: Block Categories
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - categories
+  - menu
+  - side menu
+  - blockcategories
+description_short: The block categories module is a standard module from thirty bees that adds a category menu to your left or right column.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: true
+license: MIT
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2

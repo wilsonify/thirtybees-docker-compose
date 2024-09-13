@@ -1,0 +1,1 @@
+The block currencies module allows you to let customers switch between you supported currencies on the front end of your site. The block currenices gets the currency conversion rates from the Fixer.io module.

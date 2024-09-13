@@ -1,0 +1,21 @@
+module_name: Block Viewed Products
+compatible_versions: 1.0.0+
+author: thirty bees
+category: front office
+tags:
+  - viewed products
+  - viewed
+  - recently viewed
+  - blockviewed
+description_short: The block viewed module adds a block of recently viewed products to your site.
+description: description.md
+images:
+  - image-1.png
+gdpr_compliant: false
+license: AFL
+php_version:
+  - 5.5
+  - 5.6
+  - 7.0
+  - 7.1
+  - 7.2
