@@ -14,6 +14,13 @@ services:
       MYSQL_PASSWORD: thirtybees
       MYSQL_ROOT_PASSWORD: root
 
+  dbgate:
+    image: dbgate/dbgate:alpine
+    restart: unless-stopped
+    ports:
+      - "31000:3000"
+
+
   thirtybees:
     image: "ghcr.io/wilsonify/thirtybees:1.0.0"
     ports:
