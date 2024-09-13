@@ -49,7 +49,7 @@ composer.dev.lock
 # Themes, modules and overrides
 
 
-/override/*
+
 /themes/*
 !/themes/.htaccess
 !/themes/debug.tpl
