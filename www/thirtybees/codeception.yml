@@ -1,0 +1,32 @@
+namespace: Tests
+support_namespace: Support
+paths:
+    tests: tests
+    output: tests/_output
+    data: tests/Support/Data
+    support: tests/Support
+    envs: tests/_envs
+actor_suffix: Tester
+settings:
+    colors: true
+    error_level: E_ALL | E_STRICT
+    memory_limit: 1280M
+bootstrap: _bootstrap.php
+extensions:
+    enabled:
+        - Codeception\Extension\RunFailed
+modules:
+    config:
+        Db:
+            dsn: 'mysql:host=mysql;dbname=thirtybees'
+            user: 'thirtybees'
+            password: 'thirtybees'
+            populate: false
+            cleanup: false
+            reconnect: true
+        WebDriver:
+            url: 'http://localhost'
+            browser: phantomjs
+            window_size: 1920x1080
+        PhpBrowser:
+            url: 'http://localhost'
