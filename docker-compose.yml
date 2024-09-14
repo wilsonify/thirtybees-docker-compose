@@ -29,6 +29,9 @@ services:
       - mysql
       - memcached
     restart: unless-stopped
+    environment:
+      MYSQL_USER: thirtybees
+      MYSQL_PASSWORD: thirtybees
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost" ]
       interval: 30s
