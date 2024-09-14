@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y  \
     libonig-dev \
     libicu-dev \
     nginx \
+    mariadb-client \
     supervisor
 
 # PHP extensions
@@ -48,37 +49,11 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 # bootstrap files
 COPY default.conf /etc/nginx/conf.d/default.conf
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-COPY ./www/thirtybees /var/www/default
+COPY --chown=www-data:www-data --chmod=755 ./www/thirtybees /var/www/default
 WORKDIR /var/www/default
-RUN chown -R www-data:www-data /var/www/default
-RUN chmod -R 755 /var/www/default
 
 # Install thirtybees
 RUN COMPOSER=composer/php8.3/composer.json composer install
-RUN php install-dev/index_cli.php  \
---activity=0 \
---all_languages=0 \
---base_uri=/  \
---country=us  \
---db_clear=1 \
---db_create=1  \
---db_name=thirtybees \
---db_server=mysql \
---db_user=thirtybees \
---domain=localhost:9000  \
---email=pub@thirtybees.com \
---engine=mariadb \
---firstname=John \
---language=en  \
---lastname=bees  \
---license==0 \
---name=thirty-bees \
---newsletter=1  \
---password=thirtybees \
---prefix=tb_ \
---send_email=1 \
---step=all \
---timezone=US/Eastern
 
 # Expose port 80 for Nginx
 EXPOSE 80
