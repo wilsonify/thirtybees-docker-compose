@@ -2,3 +2,4 @@
 .vscode/
 mariadb_backup_*.xml
 *.key
+*.sql.zip
