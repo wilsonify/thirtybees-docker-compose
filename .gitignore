@@ -3,3 +3,4 @@
 mariadb_backup_*.xml
 *.key
 *.sql.zip
+*.sql.gz
