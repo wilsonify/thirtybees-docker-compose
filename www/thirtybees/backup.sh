@@ -1,2 +1,2 @@
 #!/bin/bash
-mariadb-dump --host=mysql --user=$MYSQL_USER --password=$MYSQL_PASSWORD thirtybees --xml > "mariadb_backup_$(date +'%Y%m%d%H%M%S').xml"
+mariadb-dump --host=mariadb --user=$MARIADB_USER --password=MARIADB_PASSWORD thirtybees --xml > "mariadb_backup_$(date +'%Y%m%d%H%M%S').xml"
