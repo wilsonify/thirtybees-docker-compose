@@ -5,14 +5,14 @@ services:
     image: memcached:1.6.29
     restart: unless-stopped
 
-  mysql:
+  mariadb:
     image: mariadb:11.4.3
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: thirtybees
-      MYSQL_USER: thirtybees
-      MYSQL_PASSWORD: thirtybees
-      MYSQL_ROOT_PASSWORD: root
+      MARIADB_DATABASE: thirtybees
+      MARIADB_USER: thirtybees
+      MARIADB_PASSWORD: thirtybees
+      MARIADB_ROOT_PASSWORD: root
 
   dbgate:
     image: dbgate/dbgate:alpine
@@ -20,18 +20,17 @@ services:
     ports:
       - "31000:3000"
 
-
   thirtybees:
     image: "ghcr.io/wilsonify/thirtybees:1.0.0"
     ports:
-      - "32080:80"  # Expose Nginx on host port 32080
+      - "32080:80"
     depends_on:
-      - mysql
+      - mariadb
       - memcached
     restart: unless-stopped
     environment:
-      MYSQL_USER: thirtybees
-      MYSQL_PASSWORD: thirtybees
+      MARIADB_USER: thirtybees
+      MARIADB_PASSWORD: thirtybees
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost" ]
       interval: 30s
