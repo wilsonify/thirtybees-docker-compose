@@ -1,5 +1,16 @@
-apiVersion: v2
 name: thirtybees-stack
 description: A Helm chart for thirtybees, memcached, and MariaDB
-version: 0.1.0
+apiVersion: v2
+version: 0.0.1
 appVersion: "1.0.0"
+keywords:
+  - docker-compose
+sources: [ https://github.com/wilsonify/thirtybees-docker-compose ]
+home: https://github.com/wilsonify/thirtybees-docker-compose
+
+
+
+
+
+
+

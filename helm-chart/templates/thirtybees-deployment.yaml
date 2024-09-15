@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert --file docker-compose.yml --chart
+    kompose.version: 1.34.0 (cbf2835db)
+  labels:
+    io.kompose.service: thirtybees
+  name: thirtybees
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      io.kompose.service: thirtybees
+  template:
+    metadata:
+      annotations:
+        kompose.cmd: kompose convert --file docker-compose.yml --chart
+        kompose.version: 1.34.0 (cbf2835db)
+      labels:
+        io.kompose.service: thirtybees
+    spec:
+      containers:
+        - env:
+            - name: MARIADB_PASSWORD
+              value: thirtybees
+            - name: MARIADB_USER
+              value: thirtybees
+          image: ghcr.io/wilsonify/thirtybees:1.0.0
+          livenessProbe:
+            exec:
+              command:
+                - curl -f http://localhost
+            failureThreshold: 5
+            periodSeconds: 30
+            timeoutSeconds: 10
+          name: thirtybees
+          ports:
+            - containerPort: 80
+              protocol: TCP
+      restartPolicy: Always
