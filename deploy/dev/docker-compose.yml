@@ -5,11 +5,12 @@ services:
       context: ../../src/cloudflared
     restart: unless-stopped
     env_file: .env
-    command: tunnel --no-autoupdate run --token $CLOUD_FLARE_TOKEN
+    command: tunnel --no-autoupdate --config /etc/cloudflared/config.yaml run --token $CLOUD_FLARE_TOKEN
+    volumes:
+      - ./config.yaml:/etc/cloudflared/config.yaml:ro
     depends_on:
-      - nginx
-    networks:
-      - thirtybees-network
+      - thirtybees
+    network_mode: host
 
   memcached:
     build:

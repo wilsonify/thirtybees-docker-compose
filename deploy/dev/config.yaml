@@ -1,36 +1,14 @@
-# Cloudflare Tunnel Configuration for HatShop
-# Tunnel: thirtybees-tunnel
-# ID: d9a5bcb5-05cd-4493-9fbc-62c854a4f728
-# Captured: 2025-12-03
-# Updated: 2025-12-04
-# cloudflared tunnel --config deploy/01_dev/cloudflare/config.yaml run
-# NOTE: ingress rules in the dashboard take precedence over your local 
-# NOTE: IP restriction must be configured in Cloudflare Zero Trust:
-#   Access > Applications > Add Application > Self-hosted
-#   Or: Access > Access Policies with IP-based rules
-#
-# Port assignments:
-#   - Dev:   10080
-#   - Stage: 10081
-#   - Prod:  10082
-
-tunnel: d9a5bcb5-05cd-4493-9fbc-62c854a4f728
-
+# Cloudflare Tunnel Configuration
+tunnel: 13395bf3-fd34-4abe-bc78-ebe1e26aa55f
 ingress:
   # Dev environment (Docker Compose)
-  - hostname: thirtybees.renewed-renaissance.com
-    path: dev
-    service: http://192.168.1.128:10080
+  - hostname: thirtybees-dev.renewed-renaissance.com
+    service: http://localhost:40080
 
-  # Stage environment (KIND/Kubernetes)
-  - hostname: thirtybees.renewed-renaissance.com
-    path: stage
-    service: http://192.168.1.128:10081
-
-  # Prod environment (on port 10082)
+  # Prod environment
   - hostname: thirtybees.renewed-renaissance.com
     path: prod
-    service: http://192.168.1.128:10082
+    service: http://192.168.1.128:40082
 
   # Catch-all rule (required)
   - service: http_status:404
