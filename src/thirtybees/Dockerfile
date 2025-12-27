@@ -50,11 +50,17 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 COPY default.conf /etc/nginx/conf.d/default.conf
 RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+COPY install.sh /usr/local/bin/install-thirtybees.sh
+RUN chmod +x /usr/local/bin/install-thirtybees.sh
 COPY --chown=www-data:www-data --chmod=755 ./www/thirtybees /var/www/default
 WORKDIR /var/www/default
 
-# Install thirtybees
+# Install thirtybees composer dependencies
 RUN COMPOSER=composer/php8.3/composer.json composer install --no-dev
+
+# Set proper permissions for writable directories
+RUN mkdir -p cache log upload download && \
+    chown -R www-data:www-data config cache img log mails modules themes translations upload download
 
 # Expose port 80 for Nginx
 EXPOSE 80
