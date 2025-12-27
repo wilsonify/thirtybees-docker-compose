@@ -19,7 +19,7 @@ services:
 
   mariadb:
     build:
-      context: ../../src/mariadb
+      context: ../../src/db
     restart: unless-stopped
     env_file: .env
 

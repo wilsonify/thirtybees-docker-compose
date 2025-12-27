@@ -1,4 +1,4 @@
-FROM php:8.3-fpm AS phpbuild
+FROM php:8.3-fpm-bookworm AS phpbuild
 
 # Install necessary dependencies
 RUN apt-get update && apt-get install -y  \
@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y  \
     libjpeg62-turbo-dev \
     libmcrypt-dev \
     libpng-dev \
-    libcurl3-dev \
+    libcurl4-openssl-dev \
     libxml2-dev \
     libzip-dev \
     libc-client-dev \
@@ -48,12 +48,13 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
 
 # bootstrap files
 COPY default.conf /etc/nginx/conf.d/default.conf
+RUN rm -f /etc/nginx/sites-enabled/default /etc/nginx/sites-available/default
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY --chown=www-data:www-data --chmod=755 ./www/thirtybees /var/www/default
 WORKDIR /var/www/default
 
 # Install thirtybees
-RUN COMPOSER=composer/php8.3/composer.json composer install
+RUN COMPOSER=composer/php8.3/composer.json composer install --no-dev
 
 # Expose port 80 for Nginx
 EXPOSE 80
