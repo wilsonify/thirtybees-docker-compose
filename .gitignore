@@ -5,3 +5,4 @@ mariadb_backup_*.xml
 *.sql.zip
 *.sql.gz
 *.xml.gz
+.env

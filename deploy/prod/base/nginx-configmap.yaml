@@ -1,0 +1,73 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+  labels:
+    app.kubernetes.io/name: thirtybees
+    app.kubernetes.io/instance: prod
+    app.kubernetes.io/component: nginx
+data:
+  nginx.conf: |
+    events {
+        worker_connections 1024;
+    }
+
+    http {
+        include       /etc/nginx/mime.types;
+        default_type  application/octet-stream;
+
+        log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                        '$status $body_bytes_sent "$http_referer" '
+                        '"$http_user_agent" "$http_x_forwarded_for"';
+
+        access_log /var/log/nginx/access.log main;
+        error_log  /var/log/nginx/error.log warn;
+
+        sendfile on;
+        keepalive_timeout 65;
+
+        # Upstream for PHP service
+        upstream php_backend {
+            server php:8080;
+        }
+
+        server {
+            listen 80;
+            server_name thirtybees.renewed-renaissance.com localhost;
+
+            # Health check endpoint
+            location /health {
+                return 200 'OK';
+                add_header Content-Type text/plain;
+            }
+
+            # Route all /prod requests to the PHP application
+            location /prod {
+                # Rewrite /prod to / and /prod/... to /...
+                rewrite ^/prod$ / break;
+                rewrite ^/prod/(.*)$ /$1 break;
+                
+                proxy_pass http://php_backend;
+                proxy_http_version 1.1;
+                proxy_set_header Host $host;
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header X-Forwarded-Proto $scheme;
+                proxy_set_header X-Forwarded-Prefix /prod;
+                
+                # Handle WebSocket connections if needed
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
+                
+                # Timeout settings
+                proxy_connect_timeout 60s;
+                proxy_send_timeout 60s;
+                proxy_read_timeout 60s;
+            }
+
+            # Root location - redirect to /prod
+            location = / {
+                return 302 /prod;
+            }
+        }
+    }

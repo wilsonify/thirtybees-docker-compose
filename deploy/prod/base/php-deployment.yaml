@@ -1,0 +1,75 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: php
+  labels:
+    app.kubernetes.io/name: thirtybees
+    app.kubernetes.io/instance: prod
+    app.kubernetes.io/component: php
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: thirtybees
+      app.kubernetes.io/component: php
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: thirtybees
+        app.kubernetes.io/instance: prod
+        app.kubernetes.io/component: php
+    spec:
+      containers:
+        - name: php
+          image: ghcr.io/wilsonify/thirtybees:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+              name: http
+          env:
+            - name: APACHE_PORT
+              value: "8080"
+          envFrom:
+            - configMapRef:
+                name: thirtybees-config
+            - secretRef:
+                name: thirtybees-secrets
+                optional: true
+          resources:
+            requests:
+              memory: "256Mi"
+              cpu: "200m"
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 5
+            timeoutSeconds: 5
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: php
+  labels:
+    app.kubernetes.io/name: thirtybees
+    app.kubernetes.io/instance: prod
+    app.kubernetes.io/component: php
+spec:
+  selector:
+    app.kubernetes.io/name: thirtybees
+    app.kubernetes.io/component: php
+  ports:
+    - port: 8080
+      targetPort: 8080
+      name: http

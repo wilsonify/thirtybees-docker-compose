@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+
+  cloudflared:
+    build:
+      context: ../../src/cloudflared
+    restart: unless-stopped
+    env_file: .env
+    command: tunnel --no-autoupdate run --token $CLOUD_FLARE_TOKEN
+    depends_on:
+      - nginx
+    networks:
+      - thirtybees-network
+
+  memcached:
+    build:
+      context: ../../src/memcached
+    restart: unless-stopped
+
+  mariadb:
+    build:
+      context: ../../src/mariadb
+    restart: unless-stopped
+    env_file: .env
+
+  thirtybees:
+    build:
+      context: ../../src/thirtybees
+    ports:
+      - "32080:80"
+    depends_on:
+      - mariadb
+      - memcached
+    restart: unless-stopped
+    env_file: .env
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -f http://localhost" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5

@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: thirtybees-config
+  labels:
+    app.kubernetes.io/name: thirtybees
+    app.kubernetes.io/instance: prod
+    app.kubernetes.io/component: config
+data:
+  # Feature Flags - Set chapter level to enable all features up to chapter 12
+  THIRTYBEES_CHAPTER_LEVEL: "12"
+
+  # Path prefix for assets and links (matches Cloudflare tunnel path)
+  THIRTYBEES_PATH_PREFIX: "prod"
+
+  # Database Configuration - Neon PostgreSQL
+  THIRTYBEES_DB_SERVER: "ep-jolly-bird-a53fz3ri-pooler.us-east-2.aws.neon.tech"
+  THIRTYBEES_DB_USERNAME: "neondb_owner"
+  THIRTYBEES_DB_DATABASE: "neondb"
+  THIRTYBEES_DB_SSLMODE: "require"
+
+  # Server Configuration
+  THIRTYBEES_HTTP_SERVER_HOST: "thirtybees.renewed-renaissance.com"
+  THIRTYBEES_HTTP_SERVER_PORT: "443"
+
+  # Error Handling - Production settings
+  THIRTYBEES_DEBUGGING: "false"
+  THIRTYBEES_IS_WARNING_FATAL: "false"
+  THIRTYBEES_LOG_ERRORS: "true"
+  THIRTYBEES_LOG_ERRORS_FILE: "/var/log/thirtybees/errors.log"
+
+  # Display Settings
+  THIRTYBEES_PRODUCTS_PER_PAGE: "4"
+  THIRTYBEES_SHORT_PRODUCT_DESCRIPTION_LENGTH: "150"
+
+  # PayPal Configuration (Chapter 6) - Production
+  THIRTYBEES_PAYPAL_URL: "https://www.paypal.com/cgi-bin/webscr"
+  THIRTYBEES_PAYPAL_CURRENCY_CODE: "USD"
+
+  # Feature documentation
+  # Chapter 8: Shopping Cart
+  # Chapter 9: Customer Orders
+  # Chapter 10: Product Recommendations
+  # Chapter 11: Customer Details
+  # Chapter 12: Order Storage
