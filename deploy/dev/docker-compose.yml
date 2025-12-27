@@ -1,5 +1,3 @@
-version: '3'
-
 services:
 
   cloudflared:
@@ -28,7 +26,7 @@ services:
     build:
       context: ../../src/thirtybees
     ports:
-      - "32080:80"
+      - "40080:80"
     depends_on:
       - mariadb
       - memcached
