@@ -1,0 +1,55 @@
+baseURL = 'https://wilsonify.github.io/thirtybees-docker-compose/'
+languageCode = 'en-us'
+title = 'thirty bees Docker Compose'
+
+[module]
+  [[module.imports]]
+    path = "github.com/adityatelange/hugo-PaperMod"
+
+[params]
+  description = "Deploy thirty bees e-commerce platform with Docker Compose"
+  env = "production"
+  defaultTheme = "auto"
+  ShowReadingTime = true
+  ShowShareButtons = false
+  ShowPostNavLinks = true
+  ShowBreadCrumbs = true
+  ShowCodeCopyButtons = true
+  ShowToc = true
+
+[params.homeInfoParams]
+  Title = "thirty bees Docker Compose"
+  Content = "Deploy thirty bees e-commerce platform with Docker Compose and Cloudflare Tunnel"
+
+[[params.socialIcons]]
+  name = "github"
+  url = "https://github.com/wilsonify/thirtybees-docker-compose"
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "Home"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "users"
+    name = "Users"
+    url = "/users/"
+    weight = 2
+  [[menu.main]]
+    identifier = "developers"
+    name = "Developers"
+    url = "/developers/"
+    weight = 3
+  [[menu.main]]
+    identifier = "admins"
+    name = "Admins"
+    url = "/admins/"
+    weight = 4
+
+[markup]
+  [markup.highlight]
+    style = "monokai"
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
