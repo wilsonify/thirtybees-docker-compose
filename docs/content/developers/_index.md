@@ -75,7 +75,7 @@ docker compose logs -f thirtybees
 
 ### thirtybees (PHP + Nginx)
 
-Built from `php:8.3-fpm-bookworm` with:
+Built from `php:8.3.36-fpm-bookworm` with:
 
 - PHP Extensions: bcmath, curl, gd, iconv, imap, intl, mbstring, pdo_mysql, soap, xml, zip, memcached
 - Nginx as reverse proxy

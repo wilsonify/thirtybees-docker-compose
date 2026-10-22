@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-bookworm AS phpbuild
+FROM php:8.3.36-fpm-bookworm AS phpbuild
 
 # Install necessary dependencies
 RUN apt-get update && apt-get install -y  \
