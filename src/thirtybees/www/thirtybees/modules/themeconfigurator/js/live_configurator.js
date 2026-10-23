@@ -80,7 +80,7 @@ $(document).ready(
 				}
 				else
 				{
-					shadow = $.totalStorage('live_configurator_shadow')
+					var shadow = $.totalStorage('live_configurator_shadow')
 					$('#tool_customization').animate({left: '0px'}, 500)
 																	.css({boxShadow: shadow});
 					$(this).animate({left : '215px'}, 500);
