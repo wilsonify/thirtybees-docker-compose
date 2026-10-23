@@ -80,7 +80,7 @@ function SmartWizard(target, options) {
                     }
                 }
             }
-            return false;
+            return !$(this).hasClass('disabled');
         });
 
         $($this.steps).bind("click", function(e){
@@ -204,7 +204,7 @@ function SmartWizard(target, options) {
             var curElementLeft = 0;
             if(stepIdx > prevCurStepIdx){
                 nextElmLeft1 = $this.elmStepContainer.width() + 10;
-                nextElmLeft2 = 0;
+                var nextElmLeft2 = 0;
                 curElementLeft = 0 - _step($this, curStep).outerWidth();
             } else {
                 nextElmLeft1 = 0 - _step($this, selStep).outerWidth() + 20;
