@@ -20,7 +20,7 @@ $(document).ready(function() {
   });
 
   $('.wishlist').each(function() {
-    current = $(this);
+    var current = $(this);
     $(this).children('.wishlist_button_list').popover({
       html: true,
       content: function() {
@@ -174,7 +174,7 @@ function WishlistProductManage(id, action, id_wishlist, id_product, id_product_a
         $('#wlp_' + id_product + '_' + id_product_attribute).fadeOut('fast');
         $('#wlp_' + id_product + '_' + id_product_attribute).fadeIn('fast');
       }
-      nb_products = 0;
+      var nb_products = 0;
       $('[id^=\'quantity\']').each(function(index, element) {
         nb_products += parseInt(element.value);
       });
