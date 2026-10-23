@@ -192,10 +192,9 @@ function setDayPeriod() {
 }
 
 function setPreviousDayPeriod() {
-	var date = new Date();
-	date = date.subDays(1);
-	$("#date-start").val(date.format($("#date-start").data('date-format')));
-	$("#date-end").val(date.format($("#date-end").data('date-format')));
+	var day = new Date().subDays(1);
+	$("#date-start").val(day.format($("#date-start").data('date-format')));
+	$("#date-end").val(day.format($("#date-end").data('date-format')));
 	$('#date-start').trigger('change');
 
 	updatePickerFromInput();
@@ -206,10 +205,10 @@ function setPreviousDayPeriod() {
 }
 
 function setMonthPeriod() {
-	var date = new Date();
-	$("#date-end").val(date.format($("#date-end").data('date-format')));
-	date = new Date(date.setDate(1));
-	$("#date-start").val(date.format($("#date-start").data('date-format')));
+	var today = new Date();
+	$("#date-end").val(today.format($("#date-end").data('date-format')));
+	var monthStart = new Date(today.getFullYear(), today.getMonth(), 1);
+	$("#date-start").val(monthStart.format($("#date-start").data('date-format')));
 	$('#date-start').trigger('change');	
 
 	updatePickerFromInput();
@@ -220,11 +219,10 @@ function setMonthPeriod() {
 }
 
 function setPreviousMonthPeriod() {
-	var date = new Date();
-	date = new Date(date.getFullYear(), date.getMonth(), 0);
-	$("#date-end").val(date.format($("#date-end").data('date-format')));
-	date = new Date(date.setDate(1));
-	$("#date-start").val(date.format($("#date-start").data('date-format')));
+	var prevMonthEnd = new Date(new Date().getFullYear(), new Date().getMonth(), 0);
+	$("#date-end").val(prevMonthEnd.format($("#date-end").data('date-format')));
+	var prevMonthStart = new Date(prevMonthEnd.getFullYear(), prevMonthEnd.getMonth(), 1);
+	$("#date-start").val(prevMonthStart.format($("#date-start").data('date-format')));
 	$('#date-start').trigger('change');	
 
 	updatePickerFromInput();
@@ -235,10 +233,10 @@ function setPreviousMonthPeriod() {
 }
 
 function setYearPeriod() {
-	var date = new Date();
-	$("#date-end").val(date.format($("#date-end").data('date-format')));
-	date = new Date(date.getFullYear(), 0, 1);
-	$("#date-start").val(date.format($("#date-start").data('date-format')));	
+	var today = new Date();
+	$("#date-end").val(today.format($("#date-end").data('date-format')));
+	var yearStart = new Date(today.getFullYear(), 0, 1);
+	$("#date-start").val(yearStart.format($("#date-start").data('date-format')));	
 	$('#date-start').trigger('change');
 
 	updatePickerFromInput();
@@ -249,12 +247,10 @@ function setYearPeriod() {
 }
 
 function setPreviousYearPeriod() {
-	var date = new Date();
-	date = new Date(date.getFullYear(), 11, 31);
-	date = date.subYears(1);
-	$("#date-end").val(date.format($("#date-end").data('date-format')));
-	date = new Date(date.getFullYear(), 0, 1);
-	$("#date-start").val(date.format($("#date-start").data('date-format')));
+	var prevYearEnd = new Date(new Date().getFullYear() - 1, 11, 31);
+	$("#date-end").val(prevYearEnd.format($("#date-end").data('date-format')));
+	var prevYearStart = new Date(prevYearEnd.getFullYear(), 0, 1);
+	$("#date-start").val(prevYearStart.format($("#date-start").data('date-format')));
 	$('#date-start').trigger('change');
 
 	updatePickerFromInput();
