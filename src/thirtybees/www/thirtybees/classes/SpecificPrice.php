@@ -428,10 +428,17 @@ class SpecificPriceCore extends ObjectModel
 
         $priority = static::getPriority($idProduct);
         $definition = array_keys(static::$definition['fields']);
+        $valuesByField = [
+            'id_customer' => $idCustomer,
+            'id_group' => $idGroup,
+            'id_country' => $idCountry,
+            'id_currency' => $idCurrency,
+            'id_shop' => $idShop,
+            'id_product' => $idProduct,
+        ];
         foreach (array_reverse($priority) as $k => $field) {
-            $snakeCaseField = lcfirst(str_replace(' ', '', ucwords(str_replace('_', ' ', $field))));
-            if (!empty($field) && isset($$snakeCaseField) && in_array($field, $definition)) {
-                $select .= ' IF (`'.bqSQL($field).'` = '.(int) $$snakeCaseField.', '.pow(2, $k + 1).', 0) + ';
+            if (!empty($field) && isset($valuesByField[$field]) && in_array($field, $definition)) {
+                $select .= ' IF (`'.bqSQL($field).'` = '.(int) $valuesByField[$field].', '.pow(2, $k + 1).', 0) + ';
             }
         }
 
