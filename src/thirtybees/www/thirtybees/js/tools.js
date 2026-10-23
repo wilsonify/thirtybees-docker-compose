@@ -194,6 +194,7 @@ function ps_round(value, places) {
   if (typeof(roundMode) === 'undefined') {
     var roundMode = 2;
   }
+  var tmp_value;
   if (typeof(places) === 'undefined') {
     places = 2;
   }
@@ -621,7 +622,7 @@ function print_r(element, limit, depth) {
 
   var returnString = '<ol>';
 
-  for (property in element) {
+  for (var property in element) {
     //Property domConfig isn't accessable
     if (property != 'domConfig') {
       returnString += '<li><strong>' + property + '</strong> <small>(' + (typeof element[property]) + ')</small>';

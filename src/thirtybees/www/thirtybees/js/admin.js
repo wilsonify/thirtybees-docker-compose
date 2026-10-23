@@ -301,7 +301,7 @@ function checkAll(pForm) {
 }
 
 function checkDelBoxes(pForm, boxName, parent) {
-  for (i = 0; i < pForm.elements.length; i++) {
+  for (var i = 0; i < pForm.elements.length; i++) {
     if (pForm.elements[i].name == boxName) {
       pForm.elements[i].checked = parent;
     }
@@ -322,7 +322,7 @@ function checkPaymentBoxes(name, module) {
 }
 
 function setPaymentBoxes(name, module) {
-  current = $('input#checkedBox_' + name + '_' + module + '[type=hidden]');
+  var current = $('input#checkedBox_' + name + '_' + module + '[type=hidden]');
   var total = 0;
   var checked = 0;
   $('form#form_' + name + ' input[type=checkbox]').each(

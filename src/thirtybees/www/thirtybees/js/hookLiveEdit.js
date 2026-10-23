@@ -113,7 +113,7 @@ $(document).ready(function() {
 			},
 			change: function(evartent, ui) {
 				new_target_id = $(ui.placeholder).parent().attr('id');
-				ids = ui.item[0].id.split('_');
+				var ids = ui.item[0].id.split('_');
 				if ($.inArray(ids[5], hookable_list[new_target_id]) != -1) {
 					cancel = false;
 					ui.placeholder.css({

@@ -897,7 +897,7 @@ Element.extend = function(element) {
 
   if (!element._extended && element.tagName && element != window) {
     var methods = Element.Methods, cache = Element.extend.cache;
-    for (property in methods) {
+    for (var property in methods) {
       var value = methods[property];
       if (typeof value == 'function')
         element[property] = cache.findOrStore(value);

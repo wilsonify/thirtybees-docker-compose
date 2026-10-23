@@ -262,7 +262,7 @@ function disposeAllTabs() {
 
 // Select the right tabs
 if (!pos_select)
-	pos_select = 0;
+	var pos_select = 0;
 
 // DOM2
 if ( typeof window.addEventListener != "undefined" )

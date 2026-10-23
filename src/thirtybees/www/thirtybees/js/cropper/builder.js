@@ -58,7 +58,7 @@ var Builder = {
             // workaround firefox 1.0.X bug
             if(!element) {
               element = document.createElement(elementName);
-              for(attr in arguments[1]) 
+              for (var attr in arguments[1]) 
                 element[attr == 'class' ? 'className' : attr] = arguments[1][attr];
             }
             if(element.tagName != elementName)
@@ -77,7 +77,7 @@ var Builder = {
   },
   _attributes: function(attributes) {
     var attrs = [];
-    for(attribute in attributes)
+    for (var attribute in attributes)
       attrs.push((attribute=='className' ? 'class' : attribute) +
           '="' + attributes[attribute].toString().escapeHTML() + '"');
     return attrs.join(" ");

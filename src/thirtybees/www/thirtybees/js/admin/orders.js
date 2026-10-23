@@ -49,7 +49,7 @@ function updateInvoice(invoices) {
     var selected = $(this).children('option:selected').val();
 
     $(this).children('option').remove();
-    for(i in invoices) {
+    for (var i in invoices) {
       // Create new option
       var option = $('<option>' + invoices[i].name + '</option>').attr('value', invoices[i].id);
       if (invoices[i].id === selected) {

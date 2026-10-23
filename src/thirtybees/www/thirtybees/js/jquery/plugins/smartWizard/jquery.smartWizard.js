@@ -91,8 +91,9 @@ function SmartWizard(target, options) {
             var isDone = $this.steps.eq(nextStepIdx).attr("isDone") - 0;
             if(isDone == 1){
                 _loadContent($this, nextStepIdx);
+                return false;
             }
-            return false;
+            return true;
         });
 
         // Enable keyboard navigation
