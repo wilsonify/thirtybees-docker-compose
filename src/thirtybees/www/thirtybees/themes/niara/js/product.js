@@ -794,8 +794,8 @@ function updatePrice() {
 
   // Apply Tax if necessary
   if (noTaxForThisProduct || customerGroupWithoutTax) {
-    basePriceDisplay = basePriceWithoutTax;
-    priceWithDiscountsDisplay = priceWithDiscountsWithoutTax;
+    var basePriceDisplay = basePriceWithoutTax;
+    var priceWithDiscountsDisplay = priceWithDiscountsWithoutTax;
   } else {
     basePriceDisplay = basePriceWithTax;
     priceWithDiscountsDisplay = priceWithDiscountsWithTax;
@@ -839,8 +839,8 @@ function updatePrice() {
   var unit_impact = +combination.unit_impact;
   if (productUnitPriceRatio > 0 || unit_impact) {
     if (unit_impact) {
-      baseUnitPrice = productBasePriceTaxExcl / productUnitPriceRatio;
-      unit_price = baseUnitPrice + unit_impact;
+      var baseUnitPrice = productBasePriceTaxExcl / productUnitPriceRatio;
+      var unit_price = baseUnitPrice + unit_impact;
 
       if (!noTaxForThisProduct || !customerGroupWithoutTax)
         unit_price = unit_price * (taxRate / 100 + 1);
@@ -1062,7 +1062,7 @@ function getCurrentCombinationHash() {
 
 function getProductAttribute() {
   // get every attributes values
-  request = '';
+  var request = '';
 
   var tab_attributes = getCurrentCombinationAttributes();
 
@@ -1108,9 +1108,9 @@ function checkUrl() {
     // if we need to load a specific combination
     if (url.indexOf('#/') != -1) {
       // get the params to fill from a "normal" url
-      params = url.substring(url.indexOf('#') + 1, url.length);
-      tabParams = params.split('/');
-      tabValues = [];
+      var params = url.substring(url.indexOf('#') + 1, url.length);
+      var tabParams = params.split('/');
+      var tabValues = [];
       if (tabParams[0] == '') {
         tabParams.shift();
       }
