@@ -179,7 +179,7 @@
       'display': 'none'
     }).appendTo("body");
 
-    for (n = 9; n > -1; n--) {
+    for (var n = 9; n > -1; n--) {
 
       $(document.createElement("div")).attr({
         'id': 'cell' + n,
@@ -291,13 +291,8 @@
   $.fn.mColorPicker.colorShow = function (id) {
 
     var $e = $("#icp_" + id);
-        pos = $e.offset(),
-        $i = $("#" + id);
-        hex = $i.attr('data-hex') || $i.attr('hex'),
-        pickerTop = pos.top + $e.outerHeight(),
-        pickerLeft = pos.left,
-        $d = $(document),
-        $m = $("#mColorPicker");
+        var pos = $e.offset(), $i = $("#" + id);
+        var hex = $i.attr('data-hex') || $i.attr('hex'), pickerTop = pos.top + $e.outerHeight(), pickerLeft = pos.left, $d = $(document), $m = $("#mColorPicker");
 
     if ($i.attr('disabled')) return false;
 
@@ -420,7 +415,7 @@
   $.fn.mColorPicker.addToSwatch = function (color) {
   
     var swatch = []
-        i = 0;
+        var i = 0;
  
     if (typeof color == 'string') $.fn.mColorPicker.color = color.toLowerCase();
   
@@ -442,7 +437,7 @@
 
   $.fn.mColorPicker.whichColor = function (x, y, hex) {
   
-    var colorR = colorG = colorB = 255;
+    var colorR = 255, colorG = 255, colorB = 255;
     
     if (x < 32) {
   
