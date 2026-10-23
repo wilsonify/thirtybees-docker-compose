@@ -1352,6 +1352,7 @@ class AdminStockManagementControllerCore extends AdminController
                     'href'  => '#',
                     'desc'  => $this->l('Save and stay'),
                 ];
+                break;
             case 'removestock':
             case 'transferstock':
             case 'previousManagement':
