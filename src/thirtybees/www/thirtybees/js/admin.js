@@ -143,7 +143,7 @@ function copy2friendlyURL() {
     return;
   }
   if (typeof(id_product) == 'undefined') {
-    id_product = false;
+    var id_product = false;
   }
 
   //check if user didn't type anything in rewrite field, to prevent overwriting
@@ -250,7 +250,7 @@ function displayFlags(languages, defaultLanguageID, employee_cookie) {
       if (!$(this).find('.displayed_flag').length > 0) {
         $.each(languages, function (key, language) {
           if (language['id_lang'] == defaultLanguageID) {
-            defaultLanguage = language;
+            var defaultLanguage = language;
             return false;
           }
         });
@@ -290,11 +290,11 @@ function displayFlags(languages, defaultLanguageID, employee_cookie) {
 }
 
 function checkAll(pForm) {
-  for (i = 0, n = pForm.elements.length; i < n; i++) {
+  for (var i = 0, n = pForm.elements.length; i < n; i++) {
     var objName = pForm.elements[i].name;
     var objType = pForm.elements[i].type;
     if (objType == 'checkbox' && objName != 'checkme') {
-      box = eval(pForm.elements[i]);
+      var box = eval(pForm.elements[i]);
       box.checked = !box.checked;
     }
   }
@@ -310,7 +310,7 @@ function checkDelBoxes(pForm, boxName, parent) {
 
 function checkPaymentBoxes(name, module) {
   setPaymentBoxes(name, module);
-  current = $('input#checkedBox_' + name + '_' + module + '[type=hidden]');
+  var current = $('input#checkedBox_' + name + '_' + module + '[type=hidden]');
   $('form#form_' + name + ' input[type=checkbox]').each(
     function () {
       if ($(this).attr('name') == module + '_' + name + '[]') {
@@ -323,8 +323,8 @@ function checkPaymentBoxes(name, module) {
 
 function setPaymentBoxes(name, module) {
   current = $('input#checkedBox_' + name + '_' + module + '[type=hidden]');
-  total = 0;
-  checked = 0;
+  var total = 0;
+  var checked = 0;
   $('form#form_' + name + ' input[type=checkbox]').each(
     function () {
       if ($(this).attr('name') == module + '_' + name + '[]') {
@@ -382,14 +382,14 @@ function viewTemplates(id_select, lang, ext) {
 }
 
 function orderDeleteProduct(txtConfirm, txtExplain) {
-  ret = true;
+  var ret = true;
   $('table#cancelProducts input[type=checkbox]:checked').each(
     function () {
-      totalCancel = parseInt($(this).parent().parent().find('td.cancelQuantity input[type=text]').val());
-      totalQty = parseInt($(this).parent().find('input#totalQty[type=hidden]').val());
-      totalQtyReturn = parseInt($(this).parent().find('input#totalQtyReturn[type=hidden]').val());
-      productName = $(this).parent().find('input#productName[type=hidden]').val();
-      totalAvailable = totalQty - totalQtyReturn;
+      var totalCancel = parseInt($(this).parent().parent().find('td.cancelQuantity input[type=text]').val());
+      var totalQty = parseInt($(this).parent().find('input#totalQty[type=hidden]').val());
+      var totalQtyReturn = parseInt($(this).parent().find('input#totalQtyReturn[type=hidden]').val());
+      var productName = $(this).parent().find('input#productName[type=hidden]').val();
+      var totalAvailable = totalQty - totalQtyReturn;
       if (totalCancel > totalAvailable) {
         jAlert(txtConfirm + ' : \'' + ' ' + productName + '\' ! \n\n' + txtExplain + ' (' + totalCancel + ' > ' + totalAvailable + ')' + '\n ');
         ret = false;
@@ -404,8 +404,8 @@ function selectCheckbox(obj) {
 }
 
 function toggleShippingCost() {
-  generateDiscount = $('#generateDiscount').attr("checked");
-  generateCreditSlip = $('#generateCreditSlip').attr("checked");
+  var generateDiscount = $('#generateDiscount').attr("checked");
+  var generateCreditSlip = $('#generateCreditSlip').attr("checked");
   if (generateDiscount != 'checked' && generateCreditSlip != 'checked') {
     $('#spanShippingBack input[type=checkbox]').attr("checked", false);
     $('#spanShippingBack').css('display', 'none');
@@ -512,7 +512,7 @@ function disableTAASC() {
 }
 
 function spreadFees(id_range) {
-  newVal = $('#fees_all_' + id_range).val().replace(/,/g, '.');
+  var newVal = $('#fees_all_' + id_range).val().replace(/,/g, '.');
   $('.fees_' + id_range).val(newVal);
 }
 
@@ -798,16 +798,16 @@ $(document).ready(function () {
   view.bind("scroll resize", function (e) {
     message.each(function (el) {
       if (message.length) {
-        placeholder = $(this).parent();
+        var placeholder = $(this).parent();
         if (e.type == 'resize') {
           $(this).css('width', $(this).parent().width());
         }
 
-        placeholderTop = placeholder.offset().top;
+        var placeholderTop = placeholder.offset().top;
         var viewTop = view.scrollTop() + 15;
         // here we force the toolbar to be "not fixed" when
         // the height of the window is really small (toolbar hiding the page is not cool)
-        window_is_more_than_twice_the_toolbar = view.height() > message.parent().height() * 2;
+        var window_is_more_than_twice_the_toolbar = view.height() > message.parent().height() * 2;
         if (!$(this).hasClass("fix-toolbar") && (window_is_more_than_twice_the_toolbar && (viewTop > placeholderTop))) {
           $(this).css('width', $(this).width());
           // fixing parent height will prevent that annoying "pagequake" thing
@@ -1199,8 +1199,8 @@ function checkLangPack(token) {
         $('#lang_pack_loading').hide();
         ret = $.parseJSON(ret);
         if (ret.status == 'ok') {
-          content = $.parseJSON(ret.content);
-          message = langPackOk + ' <b>' + content['name'] + '</b>) :'
+          var content = $.parseJSON(ret.content);
+          var message = langPackOk + ' <b>' + content['name'] + '</b>) :'
             + '<br />' + langPackVersion + ' ' + content['version']
             + ' <a href="http://www.prestashop.com/download/lang_packs/gzip/' + content['version'] + '/'
             + ($('#iso_code').val()).toLowerCase() + '.gzip" target="_blank" class="link">' + download + '</a><br />' + langPackInfo;
@@ -1268,8 +1268,8 @@ function displayPriceValue(price) {
     price = 0;
   }
 
-  priceDatabase = parseFloat(parseFloat(price).toFixed(priceDatabasePrecision));
-  priceDisplay = ps_round(price, priceDisplayPrecision);
+  var priceDatabase = parseFloat(parseFloat(price).toFixed(priceDatabasePrecision));
+  var priceDisplay = ps_round(price, priceDisplayPrecision);
 
   var formatted;
   if (priceDatabase.toString() === priceDisplay.toString()) {
