@@ -150,7 +150,7 @@
             var rows = [];
             tbody.find('> tr').each(function () {
                 var $row = $(this), $next = null;
-                if ($row.hasClass(ft.options.classes.detail)) return true;
+                if ($row.hasClass(ft.options.classes.detail)) return;
                 if ($row.next().hasClass(ft.options.classes.detail)) {
                     $next = $row.next().get(0);
                 }
@@ -159,7 +159,7 @@
                     row.value = ft.parse(this.cells[column.sort.match], column);
                 }
                 rows.push(row);
-                return true;
+                return;
             }).detach();
             return rows;
         };
