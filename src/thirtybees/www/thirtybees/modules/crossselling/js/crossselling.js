@@ -28,8 +28,8 @@ var cs_serialScrollActualImagesIndex;
 
 function cs_serialScrollFixLock(event, targeted, scrolled, items, position)
 {
-	serialScrollNbImages = $('#crossselling_list li:visible').length;
-	serialScrollNbImagesDisplayed = 5;
+	var serialScrollNbImages = $('#crossselling_list li:visible').length;
+	var serialScrollNbImagesDisplayed = 5;
 
 	var leftArrow = position == 0 ? true : false;
 	var rightArrow = position + serialScrollNbImagesDisplayed >= serialScrollNbImages ? true : false;
