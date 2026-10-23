@@ -432,7 +432,7 @@ function searchProducts()
 		{
 			var products_found = '';
 			var attributes_html = '';
-			stock = {};
+			var stock = {};
 
 			if (res.found)
 			{
