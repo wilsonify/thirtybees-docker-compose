@@ -295,7 +295,7 @@ function validateStep(step) {
     }
 
     // Test for a continuous series of ranges.
-    for (var j = 0; nbrRanges > 1 && j < nbrRanges - 1; j += 1) {
+    for (var j = 0; j < nbrRanges - 1; j += 1) {
       rangeSup = rangesZone.find('.range_sup .input-group:eq(' + j + ') input:text');
       rangeInf = rangesZone.find('.range_inf .input-group:eq(' + (j + 1) + ') input:text');
       if (parseFloat(rangeSup.val()) !== parseFloat(rangeInf.val())) {
@@ -344,7 +344,7 @@ function ajaxRequest(step, data) {
 
 function displayError(errors, step_number) {
   $('.wizard_error').remove();
-  str_error = '<div class="error wizard_error" style="display:none"><ul>';
+  var str_error = '<div class="error wizard_error" style="display:none"><ul>';
   for (var error in errors) {
     $('input[name="' + error + '"]').closest('div.input-group').addClass('has-error');
     str_error += '<li>' + errors[error] + '</li>';
