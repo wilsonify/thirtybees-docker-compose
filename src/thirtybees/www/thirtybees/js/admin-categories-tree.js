@@ -42,7 +42,7 @@ var arrayCatToExpand = new Array();
 var id_category_root = 0;
 
 function buildTreeView() {
-  use_shop_context = 0;
+  var use_shop_context = 0;
   if (buildTreeView.arguments[0] && buildTreeView.arguments[0] == 1) {
     use_shop_context = 1;
   }
@@ -65,7 +65,7 @@ function buildTreeView() {
   $('#categories-treeview li#' + id_category_root).children('div').remove();
   $('#categories-treeview li#' + id_category_root).removeClass('collapsable lastCollapsable').addClass('last static');
 
-  disabled = $('#categories-treeview li:first input[type=checkbox]').attr('disabled');
+  var disabled = $('#categories-treeview li:first input[type=checkbox]').attr('disabled');
   $('#categories-treeview input[type=checkbox]').attr('disabled', disabled);
 
   $('#expand_all').click(function () {
@@ -123,9 +123,9 @@ function closeChildrenCategories(element) {
     arrayLevel[level].push($(this).attr('id'));
   });
 
-  for (i = arrayLevel.length - 1; i >= 0; i--) {
+  for (var i = arrayLevel.length - 1; i >= 0; i--) {
     if (arrayLevel[i] != undefined) {
-      for (j = 0; j < arrayLevel[i].length; j++) {
+      for (var j = 0; j < arrayLevel[i].length; j++) {
         $('#categories-treeview').find('li#' + arrayLevel[i][j] + '.collapsable').children('span.category_label').trigger('click');
         $('#categories-treeview').find('li#' + arrayLevel[i][j] + '.expandable').children('ul').hide();
       }
@@ -288,13 +288,13 @@ function searchCategory() {
         return item[1] + ' - ' + item[0];
       }
     }).result(function (event, item) {
-      parent_ids = getParentCategoriesIdAndOpen(item[1]);
+      var parent_ids = getParentCategoriesIdAndOpen(item[1]);
     });
   }
 }
 
 function getParentCategoriesIdAndOpen(id_category) {
-  category_to_check = id_category;
+  var category_to_check = id_category;
   $.ajax({
     type: 'POST',
     url: 'ajax.php',
