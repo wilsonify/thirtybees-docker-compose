@@ -180,7 +180,7 @@ $(document).ready(
 									$(this).html(this.legend);
 									$('#ajax-message-ok span').html(translations['price_indexation_finished']);
 									$('#ajax-message-ok').show();
-									return;
+									return true;
 								}
 								this.cursor = parseInt(res.cursor);
 								$(this).html(this.legend+translations['price_indexation_in_progress'].replace('%s', res.count));
@@ -229,7 +229,7 @@ $(document).ready(
 
 		if (typeof filters !== 'undefined')
 		{
-			filters = JSON.parse(filters);
+			var filters = JSON.parse(filters);
 
 			for (filter in filters)
 			{
