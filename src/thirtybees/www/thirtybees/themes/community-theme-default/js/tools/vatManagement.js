@@ -34,7 +34,7 @@ function vat_number_show() {
 }
 
 function vat_number_hide() {
-  divs = $('#vat_number, #vat_number_block').filter(":visible");
+  var divs = $('#vat_number, #vat_number_block').filter(":visible");
   divs.slideUp('fast');
 }
 

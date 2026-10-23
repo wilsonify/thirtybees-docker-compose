@@ -35,6 +35,7 @@ $(function() {
 });
 
 function initMarkers() {
+  var searchUrl = baseUri + '?controller=stores';
   searchUrl += '?ajax=1&all=1';
   downloadUrl(searchUrl, function(data) {
     var xml = parseXml(data.trim());

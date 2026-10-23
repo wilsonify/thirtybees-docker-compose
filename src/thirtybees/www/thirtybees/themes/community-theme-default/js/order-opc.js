@@ -164,7 +164,7 @@ $(document).ready(function() {
 
           if (jsonData.id_customer !== undefined && jsonData.id_customer !== 0 && jsonData.isSaved) {
             // update token
-            static_token = jsonData.token;
+            var static_token = jsonData.token;
 
             // It's not a new customer
             if ($('#opc_id_customer').val() !== '0')
@@ -573,7 +573,7 @@ function updateNewAccountToAddressBlock(is_adv_api) {
       if (json.hasError) {
         PrestaShop.showError(json.errors);
       } else {
-        isLogged = 1;
+        var isLogged = 1;
         if (json.no_address == 1) {
           window.location.href = addressUrl;
         }
