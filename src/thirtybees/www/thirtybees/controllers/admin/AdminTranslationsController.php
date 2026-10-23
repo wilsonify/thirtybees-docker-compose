@@ -1943,7 +1943,7 @@ class AdminTranslationsControllerCore extends AdminController
         $dir = $this->translations_informations[$this->type_selected]['dir'];
         $file = $this->translations_informations[$this->type_selected]['file'];
 
-        $$var = [];
+        $translations = [];
         if (!file_exists($dir)) {
             if (!mkdir($dir, 0700)) {
                 throw new PrestaShopException('Directory '.$dir.' cannot be created.');
@@ -1959,7 +1959,11 @@ class AdminTranslationsControllerCore extends AdminController
         }
         include($dir.DIRECTORY_SEPARATOR.$file);
 
-        return $$var;
+        if (isset(${$var}) && is_array(${$var})) {
+            $translations = ${$var};
+        }
+
+        return $translations;
     }
 
     /**
