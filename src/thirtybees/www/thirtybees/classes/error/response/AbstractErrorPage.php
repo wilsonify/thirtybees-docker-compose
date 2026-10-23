@@ -95,9 +95,7 @@ abstract class AbstractErrorPageCore implements ErrorResponseInterface
      */
     protected function displayErrorTemplate($file, $params)
     {
-        foreach ($params as $name => $param) {
-            $$name = $param;
-        }
+        extract($params, EXTR_SKIP);
 
         ob_start();
 
