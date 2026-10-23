@@ -136,7 +136,7 @@ function buildAddressBlock(id_address, address_type, dest_comp) {
   if (typeof liUpdate !== 'undefined') {
     var items = liUpdate.split(reg);
     var regUrl = new RegExp('(https?://[^"]*)', 'gi');
-    liUpdate = liUpdate.replace(regUrl, addressUrlAdd + parseInt(id_address));
+    var liUpdate = liUpdate.replace(regUrl, addressUrlAdd + parseInt(id_address));
     li_content['update'] = liUpdate;
   }
   appendAddressList(dest_comp, li_content, ordered_fields_name);
