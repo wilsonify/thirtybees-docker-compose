@@ -19,8 +19,8 @@
 $(document).ready(function() {
   $('table.tableDnD').tableDnD({
     onDragStart: function(table, row) {
-      originalOrder = $.tableDnD.serialize();
-      reOrder = ':even';
+      var originalOrder = $.tableDnD.serialize();
+      var reOrder = ':even';
 
       if (table.tBodies[0].rows[1]
           && $('#' + table.tBodies[0].rows[1].id).hasClass('alt_row')
