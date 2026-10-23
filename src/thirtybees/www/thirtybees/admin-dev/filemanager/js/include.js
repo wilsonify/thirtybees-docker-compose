@@ -16,7 +16,7 @@ $(document).ready(function(){
 			case "copy_url":
 			    var m ="";
 			    m+=$('#base_url').val()+$('#cur_dir').val();
-			    add=$trigger.find('a.link').attr('data-file');
+			    var add =$trigger.find('a.link').attr('data-file');
 			    if (add!="" && add!=null) {
 				m+=add;
 			    }
@@ -96,7 +96,7 @@ $(document).ready(function(){
     });
     
     $('ul.grid').on('click','.modalAV', function(e) {
-	_this=$(this);
+	var _this =$(this);
         e.preventDefault();
 
         $('#previewAV').removeData("modal");
