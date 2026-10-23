@@ -24,7 +24,7 @@
 
 // Retrocompatibility with 1.4
 if (typeof baseUri === "undefined" && typeof baseDir !== "undefined")
-	baseUri = baseDir;
+	var baseUri = baseDir;
 
 //JS Object : update the cart by ajax actions
 var ajaxCart = {
@@ -74,7 +74,7 @@ var ajaxCart = {
 				//retrieve idProduct and idCombination from the displayed product in the block cart
 				var firstCut = $(this).parent().parent().attr('id').replace('cart_block_product_', '');
 				firstCut = firstCut.replace('deleteCustomizableProduct_', '');
-				ids = firstCut.split('_');
+				var ids = firstCut.split('_');
 				productId = parseInt(ids[0]);
 				if (typeof(ids[1]) != 'undefined')
 					productAttributeId = parseInt(ids[1]);
@@ -400,7 +400,7 @@ var ajaxCart = {
 		else
 		{
 			$('#vouchers tbody').html('');
-			for (i=0; i < jsonData.discounts.length; i++)
+			for (var i =0; i < jsonData.discounts.length; i++)
 			{
 				if (parseFloat(jsonData.discounts[i].price_float) > 0)
 				{
@@ -499,7 +499,7 @@ var ajaxCart = {
 						// Customized product
 						if (jsonProduct.hasCustomizedDatas)
 						{
-							customizationFormatedDatas = ajaxCart.displayNewCustomizedDatas(jsonProduct);
+							var customizationFormatedDatas = ajaxCart.displayNewCustomizedDatas(jsonProduct);
 							if (!$('#customization_' + domIdProductAttribute).length)
 							{
 								if (jsonProduct.hasAttributes)
@@ -544,7 +544,7 @@ var ajaxCart = {
 		$(product.customizedDatas).each(function()
 		{
 			var done = 0;
-			customizationId = parseInt(this.customizationId);
+			var customizationId = parseInt(this.customizationId);
 			productAttributeId = typeof(product.idCombination) == 'undefined' ? 0 : parseInt(product.idCombination);
 			content += '<li name="customization"><div class="deleteCustomizableProduct" id="deleteCustomizableProduct_' + customizationId + '_' + productId + '_' + (productAttributeId ?  productAttributeId : '0') + '"><a rel="nofollow" class="ajax_cart_block_remove_link" href="' + baseUri + '?controller=cart&amp;delete=1&amp;id_product=' + productId + '&amp;ipa=' + productAttributeId + '&amp;id_customization=' + customizationId + '&amp;token=' + static_token + '"></a></div><span class="quantity-formated"><span class="quantity">' + parseInt(this.quantity) + '</span>x</span>';
 
