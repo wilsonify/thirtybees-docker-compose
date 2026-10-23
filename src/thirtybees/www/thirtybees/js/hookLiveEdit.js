@@ -36,7 +36,7 @@ $(document).ready(function() {
 	getHookableList();
 	$('.unregisterHook').unbind('click').click(function()
 	{
-		ids = $(this).attr('id').split('_');
+		var ids = $(this).attr('id').split('_');
 		$(this).parent().parent().parent().fadeOut('slow', function() {
 			$(this).parent().data('id', + ids[0]);
 			$(this).remove();
@@ -101,13 +101,13 @@ $(document).ready(function() {
 				else
 				{
 					old_target = event.target.id;
-					cancelMove = old_target;
+					var cancelMove = old_target;
 					if (new_target_id == '')
 						new_target_id = old_target;
 	        		ids = $(ui.item[0]).attr('id').split('_');
-					newHookId = $("input[value="+new_target_id+"]").attr('name').substr(10);
+					var newHookId = $("input[value="+new_target_id+"]").attr('name').substr(10);
 					newHookId = newHookId.substr(0, newHookId.length -1);
-					new_id = ids[0] + "_" + newHookId + "_" + ids[2] + "_" + ids[3] + "_" + ids[4] + "_" + ids[5] ;
+					var new_id = ids[0] + "_" + newHookId + "_" + ids[2] + "_" + ids[3] + "_" + ids[4] + "_" + ids[5] ;
 					$(ui.item[0]).attr('id', new_id);
 				}
 			},
@@ -225,7 +225,7 @@ function saveModulePosition()
 	            	$("#liveEdit-action-form").append('<input class="dynamic-input-save-position" type="hidden" name="hook[' + parseInt($('#' + hooks_list[i]).data('id')) + '][0]" value="0" />');
     }
 	$("#liveEdit-action-form").append('<input class="dynamic-input-save-position" type="hidden" name="saveHook" value="1" />');
-	datas = $("#liveEdit-action-form").serializeArray();
+	var datas = $("#liveEdit-action-form").serializeArray();
 
     $.ajax({
         type: 'POST',
