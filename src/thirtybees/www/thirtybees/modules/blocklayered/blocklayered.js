@@ -110,7 +110,7 @@ $(document).ready(function() {
     }
   });
 
-  layered_hidden_list = {};
+  var layered_hidden_list = {};
   $('.hide-action').live('click', function() {
     if (typeof(layered_hidden_list[$(this).parent().find('ul').attr('id')]) == 'undefined' || layered_hidden_list[$(this).parent().find('ul').attr('id')] == false) {
       layered_hidden_list[$(this).parent().find('ul').attr('id')] = true;
@@ -269,7 +269,7 @@ function paginationButton() {
 
     $(this).children().click(function () {
       if (nbPage == 0) {
-        p = parseInt($(this).html().replace(/<(.|\n)*?>/g, '')) + parseInt(nbPage) ;
+        var p = parseInt($(this).html().replace(/<(.|\n)*?>/g, '')) + parseInt(nbPage) ;
       } else {
         p = nbPage;
       }
@@ -326,7 +326,7 @@ function stopAjaxQuery() {
   if (typeof(ajaxQueries) == 'undefined') {
     ajaxQueries = new Array();
   }
-  for(i = 0; i < ajaxQueries.length; i++) {
+  for(var i = 0; i < ajaxQueries.length; i++) {
     if (typeof ajaxQueries[i] != 'undefined')
       ajaxQueries[i].abort();
   }
@@ -342,7 +342,7 @@ function reloadContent(params_plus) {
     ajaxLoaderOn = 1;
   }
 
-  data = $('#layered_form').serialize();
+  var data = $('#layered_form').serialize();
   $('.layered_slider').each(function () {
     var sliderStart = $(this).slider('values', 0);
     var sliderStop = $(this).slider('values', 1);
@@ -394,7 +394,7 @@ function reloadContent(params_plus) {
     }
   });
 
-  ajaxQuery = $.ajax({
+  var ajaxQuery = $.ajax({
     type: 'GET',
     url: baseDir+'modules/blocklayered/blocklayered-ajax.php',
     data: data+params_plus+n,
@@ -442,7 +442,7 @@ function reloadContent(params_plus) {
 
       // On submiting nb items form, relaod with the good nb of items
       $('#pagination form').submit(function() {
-        val = $('#pagination #nb_item').val();
+        var val = $('#pagination #nb_item').val();
         $('#pagination #nb_item').children().each(function(it, option) {
           if (option.value == val) {
             $(option).attr('selected', true);
@@ -465,7 +465,7 @@ function reloadContent(params_plus) {
 
       // Currente page url
       if (typeof(current_friendly_url) == 'undefined') {
-        current_friendly_url = '#';
+        var current_friendly_url = '#';
       }
 
       // Get all sliders value
@@ -490,7 +490,7 @@ function reloadContent(params_plus) {
       } else {
         window.location.hash = window.current_friendly_url;
       }
-      lockLocationChecking = true;
+      var lockLocationChecking = true;
 
       if (slideUp) {
         $.scrollTo('.product_list', 400);
