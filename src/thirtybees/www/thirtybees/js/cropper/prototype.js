@@ -1819,7 +1819,7 @@ var Position = {
       valueL += element.offsetLeft || 0;
       element = element.offsetParent;
       if (element) {
-        p = Element.getStyle(element, 'position');
+        var p = Element.getStyle(element, 'position');
         if (p == 'relative' || p == 'absolute') break;
       }
     } while (element);
