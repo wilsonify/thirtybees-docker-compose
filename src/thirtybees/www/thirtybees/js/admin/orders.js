@@ -177,7 +177,7 @@ function editProductRefreshTotal(element) {
     $.each(element_list, function (i, elm) {
       if ($(elm).find('.edit_product_quantity').length) {
         qty += parseInt($(elm).find('.edit_product_quantity').val());
-        subtotal = makeTotalProductCaculation($(elm).find('.edit_product_quantity').val(), price);
+        var subtotal = makeTotalProductCaculation($(elm).find('.edit_product_quantity').val(), price);
         $(elm).find('.total_product').html(formatCurrency(subtotal, currency_format, currency_sign, currency_blank));
       }
     });
