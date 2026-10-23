@@ -153,7 +153,7 @@ const getPriceDisplayPrecision = (function() {
 function ps_round_helper(value, mode) {
   // From PHP Math.c
   if (value >= 0.0) {
-    tmp_value = Math.floor(value + 0.5);
+    var tmp_value = Math.floor(value + 0.5);
     if ((mode == 3 && value == (-0.5 + tmp_value)) ||
       (mode == 4 && value == (0.5 + 2 * Math.floor(tmp_value / 2.0))) ||
       (mode == 5 && value == (0.5 + 2 * Math.floor(tmp_value / 2.0) - 1.0))) {
@@ -192,7 +192,7 @@ function ps_round_half_up(value, precision) {
 
 function ps_round(value, places) {
   if (typeof(roundMode) === 'undefined') {
-    roundMode = 2;
+    var roundMode = 2;
   }
   if (typeof(places) === 'undefined') {
     places = 2;
@@ -398,7 +398,7 @@ function checkCustomizations() {
 }
 
 function emptyCustomizations() {
-  customizationId = null;
+  var customizationId = null;
   if (typeof(customizationFields) == 'undefined') {
     return;
   }
@@ -619,7 +619,7 @@ function print_r(element, limit, depth) {
   depth = depth ? depth : 0;
   limit = limit ? limit : 1;
 
-  returnString = '<ol>';
+  var returnString = '<ol>';
 
   for (property in element) {
     //Property domConfig isn't accessable
@@ -644,7 +644,7 @@ function print_r(element, limit, depth) {
   returnString += '</ol>';
 
   if (depth == 0) {
-    winpop = window.open("", "", "width=800,height=600,scrollbars,resizable");
+    var winpop = window.open("", "", "width=800,height=600,scrollbars,resizable");
     winpop.document.write('<pre>' + returnString + '</pre>');
     winpop.document.close();
   }
@@ -684,7 +684,7 @@ function isCleanHtml(content) {
 
 function getStorageAvailable() {
   test = 'foo';
-  storage = window.localStorage || window.sessionStorage;
+  var storage = window.localStorage || window.sessionStorage;
   try {
     storage.setItem(test, test);
     storage.removeItem(test);
