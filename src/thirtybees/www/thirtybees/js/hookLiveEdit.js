@@ -104,7 +104,7 @@ $(document).ready(function() {
 					var cancelMove = old_target;
 					if (new_target_id == '')
 						new_target_id = old_target;
-	        		ids = $(ui.item[0]).attr('id').split('_');
+					var ids = $(ui.item[0]).attr('id').split('_');
 					var newHookId = $("input[value="+new_target_id+"]").attr('name').substr(10);
 					newHookId = newHookId.substr(0, newHookId.length -1);
 					var new_id = ids[0] + "_" + newHookId + "_" + ids[2] + "_" + ids[3] + "_" + ids[4] + "_" + ids[5] ;
@@ -217,7 +217,7 @@ function saveModulePosition()
 		{
 			$('#' + hooks_list[i] + ' > .dndModule').each(function(){
 	
-	            ids = $(this).attr('id').split('_');
+	            var ids = $(this).attr('id').split('_');
 	            $("#liveEdit-action-form").append('<input class="dynamic-input-save-position" type="hidden" name="hook[' + ids[1] + '][]" value="' + ids[3] + '" />');
 	        });
 		}

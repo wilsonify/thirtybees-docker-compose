@@ -1119,7 +1119,7 @@ Element.addMethods = function(methods) {
 
   if(typeof HTMLElement != 'undefined') {
     var methods = Element.Methods, cache = Element.extend.cache;
-    for (property in methods) {
+    for (var property in methods) {
       var value = methods[property];
       if (typeof value == 'function')
         HTMLElement.prototype[property] = cache.findOrStore(value);

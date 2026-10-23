@@ -76,7 +76,7 @@ function updateInvoice(invoices) {
   // Update select on product addition line
   $('#payment_invoice').each(function () {
     $(this).children('option').remove();
-    for(i in invoices) {
+    for (var i in invoices) {
       // Create new option
       var option = $('<option>' + invoices[i].name + '</option>').attr('value', invoices[i].id);
 
