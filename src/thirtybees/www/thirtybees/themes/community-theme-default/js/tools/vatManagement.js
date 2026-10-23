@@ -29,7 +29,7 @@ function vat_number() {
 }
 
 function vat_number_show() {
-  divs = $('#vat_area, #vat_number, #vat_number_block').filter(":hidden");
+  var divs = $('#vat_area, #vat_number, #vat_number_block').filter(":hidden");
   divs.slideDown('slow');
 }
 
