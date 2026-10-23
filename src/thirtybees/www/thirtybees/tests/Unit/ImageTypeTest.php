@@ -127,7 +127,8 @@ class ImageTypeTest extends Unit
     )
     {
         $imageTypes = [];
-        foreach (static::$$imageTypesRef as $imageType) {
+        $referencedImageTypes = static::${$imageTypesRef};
+        foreach ($referencedImageTypes as $imageType) {
             $imageTypes[$imageType] = $imageType;
         }
         $actual = $this->tester->invokeStaticMethod(
@@ -138,7 +139,7 @@ class ImageTypeTest extends Unit
         $this->assertEquals(
             $expected,
             $actual,
-            "Failed to resolve '$imageTypeName' to '$expected', got '$actual' instead, image types = [" . implode(', ', static::$$imageTypesRef) . ']'
+            "Failed to resolve '$imageTypeName' to '$expected', got '$actual' instead, image types = [" . implode(', ', $referencedImageTypes) . ']'
         );
     }
 }
