@@ -151,7 +151,7 @@ function appendAddressList(dest_comp, values, fields_name) {
       var reg = new RegExp('[ ]+', 'g');
       var classes = name.split(reg);
       new_li.className = '';
-      for (clas in classes)
+      for (var clas in classes)
         new_li.className += 'address_' + classes[clas].toLowerCase().replace(':', '_') + ' ';
       new_li.className = $.trim(new_li.className);
       new_li.innerHTML = value;
