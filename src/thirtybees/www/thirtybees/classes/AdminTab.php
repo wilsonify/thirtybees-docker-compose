@@ -421,10 +421,12 @@ abstract class AdminTabCore
                         if (Tools::isSubmit('submitFilter'.$adminTab->table)) {
                             $okInc = true;
                         }
+                        break;
                     case 'submitReset':
                         if (Tools::isSubmit('submitReset'.$adminTab->table)) {
                             $okInc = true;
                         }
+                        break;
                     default:
                         if (isset($_GET[$action.$adminTab->table])) {
                             $okInc = true;
