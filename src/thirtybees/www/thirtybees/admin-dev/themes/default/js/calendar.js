@@ -192,7 +192,7 @@ function setDayPeriod() {
 }
 
 function setPreviousDayPeriod() {
-	date = new Date();
+	var date = new Date();
 	date = date.subDays(1);
 	$("#date-start").val(date.format($("#date-start").data('date-format')));
 	$("#date-end").val(date.format($("#date-end").data('date-format')));
@@ -206,7 +206,7 @@ function setPreviousDayPeriod() {
 }
 
 function setMonthPeriod() {
-	date = new Date();
+	var date = new Date();
 	$("#date-end").val(date.format($("#date-end").data('date-format')));
 	date = new Date(date.setDate(1));
 	$("#date-start").val(date.format($("#date-start").data('date-format')));
@@ -220,7 +220,7 @@ function setMonthPeriod() {
 }
 
 function setPreviousMonthPeriod() {
-	date = new Date();
+	var date = new Date();
 	date = new Date(date.getFullYear(), date.getMonth(), 0);
 	$("#date-end").val(date.format($("#date-end").data('date-format')));
 	date = new Date(date.setDate(1));
@@ -235,7 +235,7 @@ function setPreviousMonthPeriod() {
 }
 
 function setYearPeriod() {
-	date = new Date();
+	var date = new Date();
 	$("#date-end").val(date.format($("#date-end").data('date-format')));
 	date = new Date(date.getFullYear(), 0, 1);
 	$("#date-start").val(date.format($("#date-start").data('date-format')));	
@@ -249,7 +249,7 @@ function setYearPeriod() {
 }
 
 function setPreviousYearPeriod() {
-	date = new Date();
+	var date = new Date();
 	date = new Date(date.getFullYear(), 11, 31);
 	date = date.subYears(1);
 	$("#date-end").val(date.format($("#date-end").data('date-format')));
@@ -309,8 +309,8 @@ $( document ).ready(function() {
 	}).data('daterangepicker');
 
 	//Set first date picker to month -1 if same month
-	startDate = Date.parseDate($("#date-start").val(), $("#date-start").data('date-format'));
-	endDate = Date.parseDate($("#date-end").val(), $("#date-end").data('date-format'));
+		var startDate = Date.parseDate($("#date-start").val(), $("#date-start").data('date-format'));
+		var endDate = Date.parseDate($("#date-end").val(), $("#date-end").data('date-format'));
 
 	if (startDate.getFullYear() == endDate.getFullYear() && startDate.getMonth() == endDate.getMonth())
 		datepickerStart.setValue(startDate.subMonths(1));

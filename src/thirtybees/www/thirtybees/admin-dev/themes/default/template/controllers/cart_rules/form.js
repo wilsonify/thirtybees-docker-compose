@@ -28,10 +28,15 @@
  *  PrestaShop is an internationally registered trademark & property of PrestaShop SA
  */
 
+var product_rule_groups_counter = (typeof window.product_rule_groups_counter === 'number')
+	? window.product_rule_groups_counter
+	: 0;
+
 function addProductRuleGroup()
 {
 	$('#product_rule_group_table').show();
 	product_rule_groups_counter += 1;
+	window.product_rule_groups_counter = product_rule_groups_counter;
 	product_rule_counters[product_rule_groups_counter] = 0;
 
 	$.get(
