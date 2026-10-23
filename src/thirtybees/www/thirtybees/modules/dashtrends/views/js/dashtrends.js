@@ -39,11 +39,11 @@ function line_chart_trends(widget_name, chart_details)
       .margin({left: 80});
 
     chart.xAxis.tickFormat(function(d) {
-      date = new Date(d*1000);
+      var date = new Date(d*1000);
       return date.format(chart_details['date_format']);
     });
 
-    first_data = new Array();
+    var first_data = new Array();
     $.each(chart_details.data, function(index, value) {
       if (value.id == 'sales' || value.id == 'sales_compare')
       {
@@ -72,7 +72,7 @@ function line_chart_trends(widget_name, chart_details)
 function selectDashtrendsChart(element, type)
 {
   $('#dashtrends_toolbar dl').removeClass('active');
-  current_charts = new Array();
+  var current_charts = new Array();
   $.each(dashtrends_data, function(index, value) {
     if (value.id == type || value.id == type + '_compare')
     {
