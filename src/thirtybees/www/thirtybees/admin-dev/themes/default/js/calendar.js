@@ -179,7 +179,7 @@ function updatePickerFromInput() {
 }
 
 function setDayPeriod() {
-	date = new Date();
+	var date = new Date();
 	$("#date-start").val(date.format($("#date-start").data('date-format')));
 	$("#date-end").val(date.format($("#date-end").data('date-format')));
 	$('#date-start').trigger('change');
@@ -266,11 +266,11 @@ function setPreviousYearPeriod() {
 
 
 function setPreviousPeriod() {
-	startDate = Date.parseDate($("#date-start").val(), $("#date-start").data('date-format')).subDays(1);
-	endDate = Date.parseDate($("#date-end").val(), $("#date-end").data('date-format')).subDays(1);
+	var startDate = Date.parseDate($("#date-start").val(), $("#date-start").data('date-format')).subDays(1);
+	var endDate = Date.parseDate($("#date-end").val(), $("#date-end").data('date-format')).subDays(1);
 
-	diff = endDate - startDate;
-	startDateCompare = new Date(startDate-diff);
+	var diff = endDate - startDate;
+	var startDateCompare = new Date(startDate-diff);
 
 	$("#date-end-compare").val(startDate.format($("#date-end-compare").data('date-format')));
 	$("#date-start-compare").val(startDateCompare.format($("#date-start-compare").data('date-format')));
@@ -286,7 +286,7 @@ function setPreviousYear() {
 
 $( document ).ready(function() {
 	//Instanciate datepickers
-	datepickerStart = $('.datepicker1').daterangepicker({
+	var datepickerStart = $('.datepicker1').daterangepicker({
 		"dates": translated_dates,
 		"weekStart": 1,
 		"start": $("#date-start").val(),
@@ -297,7 +297,7 @@ $( document ).ready(function() {
 		}
 	}).data('daterangepicker');
 
-	datepickerEnd = $('.datepicker2').daterangepicker({
+	var datepickerEnd = $('.datepicker2').daterangepicker({
 		"dates": translated_dates,
 		"weekStart": 1,
 		"start": $("#date-start").val(),
