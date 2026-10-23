@@ -158,7 +158,7 @@ WebFXTabPage.prototype.show = function () {
 	el.className = s;
 	
 	this.element.style.display = "block";
-	pos_select = this.element.id.substring(4, 5) - 1;
+	var pos_select = this.element.id.substring(4, 5) - 1;
 	document.getElementById('tabs').value = pos_select;
 	loadTab(pos_select+1);
 };
