@@ -361,7 +361,7 @@ function deleteProductFromSummary(id) {
               refreshOddRow();
           });
           var exist = false;
-          for (i = 0; i < jsonData.summary.products.length; i++) {
+          for (var i = 0; i < jsonData.summary.products.length; i++) {
             if (jsonData.summary.products[i].id_product == productId &&
               jsonData.summary.products[i].id_product_attribute == productAttributeId &&
               jsonData.summary.products[i].id_address_delivery == id_address_delivery &&
