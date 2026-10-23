@@ -30,7 +30,7 @@ $(function () {
 		storage = getStorageAvailable();
 	}
 
-	initHelp = function () {
+	var initHelp = function () {
 		$('#main').addClass('helpOpen');
 		//first time only
 		if ($('#help-container').length === 0) {
