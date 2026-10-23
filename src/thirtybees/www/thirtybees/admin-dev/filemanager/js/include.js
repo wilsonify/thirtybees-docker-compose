@@ -200,7 +200,7 @@ $(document).ready(function(){
     
     var sortDescending=$('#descending').val()=== 'true';
     $('.sorter').on('click',function(){
-	_this=$(this);
+	var _this=$(this);
 	
 	sortDescending=!sortDescending;
 	if (js_script) {

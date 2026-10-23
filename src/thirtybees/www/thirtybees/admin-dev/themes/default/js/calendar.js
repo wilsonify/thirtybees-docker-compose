@@ -277,8 +277,8 @@ function setPreviousPeriod() {
 }
 
 function setPreviousYear() {
-	startDate = Date.parseDate($("#date-start").val(), $("#date-start").data('date-format')).subYears(1);
-	endDate = Date.parseDate($("#date-end").val(), $("#date-end").data('date-format')).subYears(1);
+	var startDate = Date.parseDate($("#date-start").val(), $("#date-start").data('date-format')).subYears(1);
+	var endDate = Date.parseDate($("#date-end").val(), $("#date-end").data('date-format')).subYears(1);
 	$("#date-start-compare").val(startDate.format($("#date-start").data('date-format')));
 	$("#date-end-compare").val(endDate.format($("#date-start").data('date-format')));
 }

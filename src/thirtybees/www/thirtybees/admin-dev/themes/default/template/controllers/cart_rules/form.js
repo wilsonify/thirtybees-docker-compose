@@ -107,7 +107,7 @@ function updateProductRuleShortDescription(item)
 }
 
 var restrictions = new Array('country', 'carrier', 'group', 'cart_rule', 'shop');
-for (i in restrictions)
+for (var i in restrictions)
 {
 	toggleCartRuleFilter($('#' + restrictions[i] + '_restriction'));
 	$('#' + restrictions[i] + '_restriction').click(function() {toggleCartRuleFilter(this);});
