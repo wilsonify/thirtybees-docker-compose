@@ -1,14 +1,14 @@
 $(function() {
 
-  map = new google.maps.Map(document.getElementById('map'), {
+  var map = new google.maps.Map(document.getElementById('map'), {
     center: new google.maps.LatLng(defaultLat, defaultLong),
     zoom: 10,
     mapTypeId: 'roadmap',
     mapTypeControlOptions: {style: google.maps.MapTypeControlStyle.DROPDOWN_MENU}
   });
-  infoWindow = new google.maps.InfoWindow();
+  var infoWindow = new google.maps.InfoWindow();
 
-  locationSelect = document.getElementById('locationSelect');
+  var locationSelect = document.getElementById('locationSelect');
   locationSelect.onchange = function() {
     var markerNum = locationSelect.options[locationSelect.selectedIndex].value;
     if (markerNum !== 'none')
@@ -16,7 +16,7 @@ $(function() {
   };
 
   $('#addressInput').keypress(function(e) {
-    code = e.keyCode ? e.keyCode : e.which;
+    var code = e.keyCode ? e.keyCode : e.which;
     if (code.toString() == 13)
       searchLocations();
   });
