@@ -31,7 +31,7 @@ function desktopInit() {
   $('.sf-menu > li > ul').addClass('submenu-container clearfix');
   // loop through each sublist under each top list item
   $('.sf-menu > li > ul').each(function() {
-    i = 0;
+    var i = 0;
     //add classes for clearing
     $(this).each(function() {
       if ($(this).attr('class') != 'category-thumbnail') {
