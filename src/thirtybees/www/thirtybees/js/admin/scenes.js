@@ -30,13 +30,13 @@
 
 /* global jQuery, $, window, showSuccessMessage, showErrorMessage */
 
-zoneCurrent = 0;
-selectionCurrent = null;
-valueOfZoneEdited = null;
+var zoneCurrent = 0;
+var selectionCurrent = null;
+var valueOfZoneEdited = null;
 
 // Last item is used to save the current zone and
 // allow to replace it if user cancel the editing
-lastEditedItem = null;
+var lastEditedItem = null;
 
 /* functions called by cropping events */
 
