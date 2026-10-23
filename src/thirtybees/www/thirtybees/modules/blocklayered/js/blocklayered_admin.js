@@ -81,7 +81,7 @@ $(document).ready(
 					this.running = false;
 
 				if (this.running == true)
-					return false;
+					return;
 
 				$('.ajax-message').hide();
 				this.running = true;
@@ -132,7 +132,7 @@ $(document).ready(
 					}
 				}
 			);
-			return this.running;
+			return;
 		});
 
 		$('.ajaxcall-recurcive').each(
