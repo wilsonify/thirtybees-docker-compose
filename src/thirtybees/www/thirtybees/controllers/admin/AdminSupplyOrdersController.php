@@ -197,6 +197,7 @@ class AdminSupplyOrdersControllerCore extends AdminController
                     'href' => '#',
                     'desc' => $this->l('Save'),
                 ];
+                break;
 
             case 'update_receipt':
                 $this->toolbar_btn['cancel'] = [
@@ -211,6 +212,7 @@ class AdminSupplyOrdersControllerCore extends AdminController
                     'href' => '#',
                     'desc' => $this->l('Save and stay'),
                 ];
+                break;
             default:
                 parent::initToolbar();
         }
