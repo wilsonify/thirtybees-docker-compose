@@ -235,7 +235,7 @@ function bindCancelDashConfig() {
 function saveDashConfig(widgetName) {
   $('section#' + widgetName + ' .form-group').removeClass('has-error');
   $('#' + widgetName + '_errors').remove();
-  configs = '';
+  var configs = '';
 
   $('#' + widgetName + ' form input, #' + widgetName + ' form textarea , #' + widgetName + ' form select').each(function () {
     if ($(this).attr('type') === 'radio' && !$(this).attr('checked')) {
@@ -244,7 +244,7 @@ function saveDashConfig(widgetName) {
     configs += '&configs[' + $(this).attr('name') + ']=' + $(this).val();
   });
 
-  data = 'ajax=true&action=saveDashConfig&module=' + widgetName + configs + '&hook=' + $('#' + widgetName).closest('[id^=hook]').attr('id');
+  var data = 'ajax=true&action=saveDashConfig&module=' + widgetName + configs + '&hook=' + $('#' + widgetName).closest('[id^=hook]').attr('id');
 
   $.ajax({
     url: window.dashboard_ajax_url,
@@ -262,7 +262,7 @@ function saveDashConfig(widgetName) {
         toggleDashConfig(widgetName);
       }
       else {
-        errors_str = '<div class="alert alert-danger" id="' + widgetName + '_errors">';
+        var errors_str = '<div class="alert alert-danger" id="' + widgetName + '_errors">';
         for (error in jsonData.errors) {
           errors_str += jsonData.errors[error] + '<br/>';
           $('#' + error).closest('.form-group').addClass('has-error');
