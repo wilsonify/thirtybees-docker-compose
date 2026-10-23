@@ -467,6 +467,7 @@ function reloadContent(params_plus) {
       if (typeof(current_friendly_url) == 'undefined') {
         var current_friendly_url = '#';
       }
+        var lockLocationChecking = false;
 
       // Get all sliders value
       $(['price', 'weight']).each(function(it, sliderType) {

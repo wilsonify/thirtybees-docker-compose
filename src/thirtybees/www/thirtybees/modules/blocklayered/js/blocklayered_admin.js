@@ -140,6 +140,7 @@ $(document).ready(
 				$(elm).click(
 					function()
 					{
+						var completed = false;
 						if (this.cursor == undefined)
 							this.cursor = 0;
 
@@ -175,12 +176,13 @@ $(document).ready(
 								this.running = false;
 								if (res.result)
 								{
+									completed = true;
 									this.cursor = 0;
 									$('#indexing-warning').hide();
 									$(this).html(this.legend);
 									$('#ajax-message-ok span').html(translations['price_indexation_finished']);
 									$('#ajax-message-ok').show();
-									return true;
+									return completed;
 								}
 								this.cursor = parseInt(res.cursor);
 								$(this).html(this.legend+translations['price_indexation_in_progress'].replace('%s', res.count));
@@ -198,7 +200,7 @@ $(document).ready(
 								this.running = false;
 							}
 						});
-						return false;
+						return completed;
 					}
 				);
 			}
@@ -231,7 +233,7 @@ $(document).ready(
 		{
 			var filters = JSON.parse(filters);
 
-			for (filter in filters)
+			for (var filter in filters)
 			{
 				$('#'+filter).attr("checked","checked");
 				$('#selected_filters').html(parseInt($('#selected_filters').html())+1);

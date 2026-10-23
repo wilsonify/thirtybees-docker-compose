@@ -309,7 +309,7 @@ var ajaxCart = {
 
 				//try to know if the current product is still in the new list
 				var stayInTheCart = false;
-				for (aProduct in jsonData.products)
+				for (var aProduct in jsonData.products)
 				{
 					//we've called the variable aProduct because IE6 bug if this variable is called product
 					//if product has attributes

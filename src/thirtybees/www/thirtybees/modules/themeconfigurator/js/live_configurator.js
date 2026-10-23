@@ -132,7 +132,7 @@ $(document).ready(
 			$('#gear-right').animate({left : '0px'}, 200);
 		}
 
-		shadow = $('#tool_customization').css('boxShadow');
+		var shadow = $('#tool_customization').css('boxShadow');
 		$.totalStorage('live_configurator_shadow', shadow);
 		$('#tool_customization').css({boxShadow: 'none'});
 	}
