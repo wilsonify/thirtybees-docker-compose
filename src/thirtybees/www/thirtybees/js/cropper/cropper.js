@@ -439,7 +439,7 @@ if(this.isIE||this.isWebKit){
 var n=document.createTextNode(" ");
 var d,el,fixEL,i;
 if(this.isIE){
-fixEl=this.selArea;
+var fixEl =this.selArea;
 }else{
 if(this.isWebKit){
 fixEl=document.getElementsByClassName("imgCrop_marqueeSouth",this.imgWrap)[0];
@@ -477,7 +477,8 @@ wrapOffsets[1]-=el.scrollTop||0;
 wrapOffsets[0]-=el.scrollLeft||0;
 el=el.parentNode;
 }
-return curPos={x:Event.pointerX(e)-wrapOffsets[0],y:Event.pointerY(e)-wrapOffsets[1]};
+var curPos ={x:Event.pointerX(e)-wrapOffsets[0],y:Event.pointerY(e)-wrapOffsets[1]};
+return curPos;
 },onDrag:function(e){
 if(this.dragging||this.resizing){
 var _54=null;
