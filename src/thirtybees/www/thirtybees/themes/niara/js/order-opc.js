@@ -65,7 +65,7 @@ $(document).ready(function() {
             $('#opc_login_errors').html(errors).slideDown('slow');
           } else {
             // update token
-            static_token = jsonData.token;
+            var static_token = jsonData.token;
             updateNewAccountToAddressBlock(that.attr('data-adv-api'));
             $("#header-navbar-right-nav").load(" #header-navbar-right-nav > *");
           }
@@ -155,7 +155,7 @@ $(document).ready(function() {
             });
           }
 
-          isGuest = parseInt($('#is_new_customer').val()) == 1 ? 0 : 1;
+          var isGuest = parseInt($('#is_new_customer').val()) == 1 ? 0 : 1;
           // update addresses id
           if (jsonData.id_address_delivery !== undefined && jsonData.id_address_delivery > 0)
             $('#opc_id_address_delivery').val(jsonData.id_address_delivery);
@@ -184,7 +184,7 @@ $(document).ready(function() {
 
             // force to refresh carrier list
             if (isGuest) {
-              isLogged = 1;
+              var isLogged = 1;
               $('#opc_account_saved').fadeIn('slow');
               $('#submitAccount').hide();
               updateAddressSelection(advApiParam);
@@ -328,7 +328,7 @@ function updateAddressSelection(is_adv_api) {
         });
 
         // Update global var deliveryAddress
-        deliveryAddress = idAddress_delivery;
+        var deliveryAddress = idAddress_delivery;
         if (window.ajaxCart !== undefined) {
           $('.cart_block_list dd, .cart_block_list dt').each(function() {
             if (typeof($(this).attr('id')) != 'undefined')
@@ -580,7 +580,7 @@ function updateNewAccountToAddressBlock(is_adv_api) {
 
         $('#opc_new_account').fadeOut('fast', function() {
           if (typeof json.formatedAddressFieldsValuesList !== 'undefined' && json.formatedAddressFieldsValuesList)
-            formatedAddressFieldsValuesList = json.formatedAddressFieldsValuesList;
+            var formatedAddressFieldsValuesList = json.formatedAddressFieldsValuesList;
           if (typeof json.order_opc_adress !== 'undefined' && json.order_opc_adress)
             $('#opc_new_account').html(json.order_opc_adress);
           // update block user info
@@ -748,9 +748,9 @@ function multishippingMode(it) {
                 }
               }
               $.fancybox.close();
-              return false;
+                return newTotalQty === totalQty;
             });
-            totalQty = 0;
+            var totalQty = 0;
             $('.fancybox-inner .cart_quantity_input').each(function() {
               totalQty += parseInt($(this).val());
             });
