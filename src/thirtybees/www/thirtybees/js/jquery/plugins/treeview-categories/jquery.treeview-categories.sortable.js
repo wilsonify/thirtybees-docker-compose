@@ -308,7 +308,7 @@
 			}
 			
 			this.dragging = false;
-			if(this.cancelHelperRemoval) return false;
+			if(this.cancelHelperRemoval) return this.cancelHelperRemoval;
 			this.helper.remove();
 
 			return false;
