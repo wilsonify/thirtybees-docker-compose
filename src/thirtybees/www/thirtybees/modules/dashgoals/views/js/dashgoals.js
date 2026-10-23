@@ -178,7 +178,7 @@ function dashgoals_changeYear(xward)
         $('#dashgoals_config').removeClass('hide');
       $('.dashgoals_config_input').off();
       $('.dashgoals_config_input').keyup(function() { dashgoals_calc_sales(); });
-      dashgoals_year = new_year;
+      var dashgoals_year = new_year;
       refreshDashboard('dashgoals', false, dashgoals_year);
     }
   });
