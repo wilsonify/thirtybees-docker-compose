@@ -53,7 +53,7 @@ function load(settings, root, child, container) {
 	        $(container).treeview({
 	        	add: child
 	        });
-			readyToExpand = true;
+			var readyToExpand = true;
 	    }
 	}, settings.ajax));
 }
