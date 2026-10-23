@@ -150,7 +150,7 @@ Tree.prototype =
       var idTree = this.$element.parent().find('.cattree.tree').first().attr('id');
       if (typeof(idTree) != 'undefined' && !$('#' + idTree).hasClass('full_loaded')) {
         var selected = [];
-        that = this;
+        var that = this;
         $('#' + idTree).find('.tree-selected input').each(
           function () {
             selected.push($(this).val());
