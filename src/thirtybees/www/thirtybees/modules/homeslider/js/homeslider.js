@@ -25,13 +25,13 @@
 $(document).ready(function(){
 
 	if (typeof(homeslider_speed) == 'undefined')
-		homeslider_speed = 500;
+		var homeslider_speed = 500;
 	if (typeof(homeslider_pause) == 'undefined')
-		homeslider_pause = 3000;
+		var homeslider_pause = 3000;
 	if (typeof(homeslider_loop) == 'undefined')
-		homeslider_loop = true;
+		var homeslider_loop = true;
     if (typeof(homeslider_width) == 'undefined')
-        homeslider_width = 779;
+        var homeslider_width = 779;
 
 
 	if (!!$.prototype.bxSlider)
