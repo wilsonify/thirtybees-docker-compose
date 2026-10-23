@@ -28,7 +28,7 @@ $(document).ready(function () {
   start_install();
 });
 
-current_step = 0;
+var current_step = 0;
 
 function start_install() {
   // If we're already installing thirty bees, do not trigger the action again.
@@ -41,7 +41,7 @@ function start_install() {
   $('#progress_bar').show();
   $('#progress_bar .installing').show();
   $('.stepList li:last-child').removeClass('ok').removeClass('ko');
-  process_pixel = parseInt($('#progress_bar .total').css('width')) / process_steps.length;
+  var process_pixel = parseInt($('#progress_bar .total').css('width')) / process_steps.length;
   $('#tabs li a').each(function () {
     this.rel = $(this).attr('href');
     this.href = '#';
