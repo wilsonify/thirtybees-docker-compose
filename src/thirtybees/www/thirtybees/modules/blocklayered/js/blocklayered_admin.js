@@ -71,8 +71,9 @@ $(document).ready(
 	function()
 	{
 		$('.ajaxcall').click(
-			function()
+			function(e)
 			{
+				e.preventDefault();
 				if (this.legend == undefined)
 					this.legend = $(this).html();
 
@@ -131,7 +132,7 @@ $(document).ready(
 					}
 				}
 			);
-			return false;
+			return this.running;
 		});
 
 		$('.ajaxcall-recurcive').each(
@@ -201,6 +202,7 @@ $(document).ready(
 							}
 						});
 						return completed;
+						return true;
 					}
 				);
 			}

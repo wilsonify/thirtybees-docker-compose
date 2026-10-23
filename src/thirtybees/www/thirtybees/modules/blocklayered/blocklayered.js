@@ -26,6 +26,7 @@ var ajaxQueries = new Array();
 var ajaxLoaderOn = 0;
 var sliderList = new Array();
 var slidersInit = false;
+var lockLocationChecking = false;
 
 $(document).ready(function() {
   cancelFilter();
@@ -467,7 +468,7 @@ function reloadContent(params_plus) {
       if (typeof(current_friendly_url) == 'undefined') {
         var current_friendly_url = '#';
       }
-        var lockLocationChecking = false;
+        lockLocationChecking = false;
 
       // Get all sliders value
       $(['price', 'weight']).each(function(it, sliderType) {
@@ -491,7 +492,7 @@ function reloadContent(params_plus) {
       } else {
         window.location.hash = window.current_friendly_url;
       }
-      var lockLocationChecking = true;
+      lockLocationChecking = true;
 
       if (slideUp) {
         $.scrollTo('.product_list', 400);
