@@ -1,9 +1,0 @@
-
-/translations/*
-!/translations/index.php
-
-/config*.xml
-
-blockcmsinfo-*.zip
-
-vendor/

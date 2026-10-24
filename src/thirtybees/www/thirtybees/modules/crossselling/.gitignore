@@ -1,7 +1,0 @@
-
-/translations/*
-!/translations/index.php
-
-/config*.xml
-
-crossselling-*.zip

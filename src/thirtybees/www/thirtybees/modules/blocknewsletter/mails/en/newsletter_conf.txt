@@ -1,8 +1,0 @@
-
-[{shop_url}] 
-
-Hi, 
-
-THANK YOU FOR SUBSCRIBING TO OUR NEWSLETTER. 
-
-{shop_name} [{shop_url}]

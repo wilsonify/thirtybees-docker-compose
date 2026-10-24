@@ -1,1 +1,0 @@
-The block specials module adds products that are on sale to your website. The module hooks to either the left or right column and to the home page as well. This module is included with all thirty bees installations.

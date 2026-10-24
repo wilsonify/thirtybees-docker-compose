@@ -1,1 +1,0 @@
-The home featured module allows you to add featured products to your home page. You can sort these featured products by the position in the cateogry you select. This module is included in all thirty bees installations.
