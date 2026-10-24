@@ -7,8 +7,6 @@ mariadb:
   replicaCount: 1
   mariadbDatabase: thirtybees
   mariadbUser: thirtybees
-  mariadbPassword: thirtybees
-  mariadbRootPassword: root
 
 thirtybees:
   image: "ghcr.io/wilsonify/thirtybees:1.0.0"

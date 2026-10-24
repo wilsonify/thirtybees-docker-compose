@@ -21,7 +21,7 @@ spec:
     spec:
       containers:
         - name: php
-          image: ghcr.io/wilsonify/thirtybees:latest
+          image: ghcr.io/wilsonify/thirtybees:1.0.0
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 8080

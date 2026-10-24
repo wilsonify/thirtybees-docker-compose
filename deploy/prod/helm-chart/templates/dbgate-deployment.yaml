@@ -20,10 +20,18 @@ spec:
       labels:
         io.kompose.service: dbgate
     spec:
+      automountServiceAccountToken: false
       containers:
         - image: dbgate/dbgate:alpine
           name: dbgate
           ports:
             - containerPort: 3000
               protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+              memory: 128Mi
+              ephemeral-storage: 1Gi
+            limits:
+              memory: 512Mi
       restartPolicy: Always

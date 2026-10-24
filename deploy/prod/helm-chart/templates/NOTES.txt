@@ -1,0 +1,6 @@
+The MariaDB credentials are read from the "mariadb-credentials" Secret.
+Create it before installing the chart:
+
+  kubectl create secret generic mariadb-credentials \
+    --from-literal=password='<application password>' \
+    --from-literal=root-password='<root password>'

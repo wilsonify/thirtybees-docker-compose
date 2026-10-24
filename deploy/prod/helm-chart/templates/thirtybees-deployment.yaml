@@ -20,10 +20,14 @@ spec:
       labels:
         io.kompose.service: thirtybees
     spec:
+      automountServiceAccountToken: false
       containers:
         - env:
             - name: MARIADB_PASSWORD
-              value: thirtybees
+              valueFrom:
+                secretKeyRef:
+                  name: mariadb-credentials
+                  key: password
             - name: MARIADB_USER
               value: thirtybees
           image: ghcr.io/wilsonify/thirtybees:1.0.0
@@ -38,4 +42,11 @@ spec:
           ports:
             - containerPort: 80
               protocol: TCP
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+              ephemeral-storage: 1Gi
+            limits:
+              memory: 1Gi
       restartPolicy: Always

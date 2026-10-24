@@ -1,6 +1,6 @@
 FROM php:8.3.36-fpm-bookworm AS phpbuild
 
-# Install necessary dependencies
+# Install necessary dependencies and PHP extensions
 RUN apt-get update && apt-get install -y  \
     git \
     unzip \
@@ -19,27 +19,24 @@ RUN apt-get update && apt-get install -y  \
     libicu-dev \
     nginx \
     mariadb-client \
-    supervisor
-
-# PHP extensions
-RUN docker-php-ext-install -j$(nproc) bcmath
-RUN docker-php-ext-install -j$(nproc) curl
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg && docker-php-ext-install -j$(nproc) gd
-RUN docker-php-ext-install -j$(nproc) iconv
-RUN docker-php-ext-configure imap --with-kerberos --with-imap-ssl && docker-php-ext-install -j$(nproc) imap
-RUN docker-php-ext-install -j$(nproc) intl
-
-RUN docker-php-ext-install -j$(nproc) mbstring
-RUN docker-php-ext-install -j$(nproc) pdo_mysql
-RUN docker-php-ext-install -j$(nproc) soap
-RUN docker-php-ext-install -j$(nproc) xml
-RUN docker-php-ext-install -j$(nproc) zip
-
-# Install memcached PHP extension
-RUN git clone https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached
-RUN docker-php-ext-configure /usr/src/php/ext/memcached --disable-memcached-sasl
-RUN docker-php-ext-install /usr/src/php/ext/memcached
-RUN rm -rf /usr/src/php/ext/memcached
+    supervisor \
+    && docker-php-ext-install -j$(nproc) bcmath \
+    && docker-php-ext-install -j$(nproc) curl \
+    && docker-php-ext-configure gd --with-freetype --with-jpeg \
+    && docker-php-ext-install -j$(nproc) gd \
+    && docker-php-ext-install -j$(nproc) iconv \
+    && docker-php-ext-configure imap --with-kerberos --with-imap-ssl \
+    && docker-php-ext-install -j$(nproc) imap \
+    && docker-php-ext-install -j$(nproc) intl \
+    && docker-php-ext-install -j$(nproc) mbstring \
+    && docker-php-ext-install -j$(nproc) pdo_mysql \
+    && docker-php-ext-install -j$(nproc) soap \
+    && docker-php-ext-install -j$(nproc) xml \
+    && docker-php-ext-install -j$(nproc) zip \
+    && git clone https://github.com/php-memcached-dev/php-memcached /usr/src/php/ext/memcached \
+    && docker-php-ext-configure /usr/src/php/ext/memcached --disable-memcached-sasl \
+    && docker-php-ext-install /usr/src/php/ext/memcached \
+    && rm -rf /usr/src/php/ext/memcached
 
 # Install Composer
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
@@ -55,12 +52,10 @@ RUN chmod +x /usr/local/bin/install-thirtybees.sh
 COPY --chown=www-data:www-data --chmod=755 ./www/thirtybees /var/www/default
 WORKDIR /var/www/default
 
-# Install thirtybees composer dependencies
-RUN COMPOSER=composer/php8.3/composer.json composer install --no-dev
-
-# Set proper permissions for writable directories
-RUN mkdir -p cache log upload download && \
-    chown -R www-data:www-data config cache img log mails modules themes translations upload download
+# Install thirtybees composer dependencies and set permissions for writable directories
+RUN COMPOSER=composer/php8.3/composer.json composer install --no-dev \
+    && mkdir -p cache log upload download \
+    && chown -R www-data:www-data config cache img log mails modules themes translations upload download
 
 # Expose port 80 for Nginx
 EXPOSE 80
