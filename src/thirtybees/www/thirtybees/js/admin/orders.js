@@ -34,11 +34,11 @@ var current_product;
 var ajaxQueries = [];
 
 function stopAjaxQuery() {
-  if (typeof ajaxQueries === 'undefined') {
+  if (ajaxQueries === undefined) {
     ajaxQueries = [];
   }
-  for (var i = 0; i < ajaxQueries.length; i++) {
-    ajaxQueries[i].abort();
+  for (const query of ajaxQueries) {
+    query.abort();
   }
   ajaxQueries = [];
 }
@@ -110,7 +110,7 @@ function populateWarehouseList(warehouseList) {
   $('#add_product_warehouse').html('');
   var warehouseSelected = false;
   $.each(warehouseList, function () {
-    if (!warehouseSelected && $.inArray(this.id_warehouse, orderWarehouseList)) {
+    if (!warehouseSelected && orderWarehouseList.indexOf(this.id_warehouse)) {
       warehouseSelected = this.id_warehouse;
     }
 
@@ -122,18 +122,18 @@ function populateWarehouseList(warehouseList) {
 }
 
 function addProductRefreshTotal() {
-  var quantity = parseInt($('#add_product_product_quantity').val(), 10);
-  if (quantity < 1 || isNaN(quantity)) {
+  var quantity = Number.parseInt($('#add_product_product_quantity').val(), 10);
+  if (quantity < 1 || Number.isNaN(quantity)) {
     quantity = 1;
   }
   var price;
   if (window.use_taxes) {
-    price = parseFloat($('#add_product_product_price_tax_incl').val());
+    price = Number.parseFloat($('#add_product_product_price_tax_incl').val());
   } else {
-    price = parseFloat($('#add_product_product_price_tax_excl').val());
+    price = Number.parseFloat($('#add_product_product_price_tax_excl').val());
   }
 
-  if (price < 0 || isNaN(price)) {
+  if (price < 0 || Number.isNaN(price)) {
     price = 0;
   }
   var total = makeTotalProductCaculation(quantity, price);
@@ -151,50 +151,51 @@ function editProductRefreshTotal(element) {
 
   // Customized product
   if (element.hasClass('customized')) {
-    var element_list = $('.customized-' + element.find('.edit_product_id_order_detail').val());
+    element_list = $('.customized-' + element.find('.edit_product_id_order_detail').val());
     element = $(element_list[0]);
   }
 
-  var quantity = parseInt(element.find('td .edit_product_quantity').val());
-  if (quantity < 1 || isNaN(quantity)) {
+  var quantity = Number.parseInt(element.find('td .edit_product_quantity').val());
+  if (quantity < 1 || Number.isNaN(quantity)) {
     quantity = 1;
   }
 
   var price;
   if (window.use_taxes) {
-    price = parseFloat(element.find('td .edit_product_price_tax_incl').val());
+    price = Number.parseFloat(element.find('td .edit_product_price_tax_incl').val());
   } else {
-    price = parseFloat(element.find('td .edit_product_price_tax_excl').val())
+    price = Number.parseFloat(element.find('td .edit_product_price_tax_excl').val())
   }
 
-  if (price < 0 || isNaN(price)) {
+  if (price < 0 || Number.isNaN(price)) {
     price = 0;
   }
 
+  var total;
   // Customized product
   if (element_list.length) {
     var qty = 0;
     $.each(element_list, function (i, elm) {
       if ($(elm).find('.edit_product_quantity').length) {
-        qty += parseInt($(elm).find('.edit_product_quantity').val());
+        qty += Number.parseInt($(elm).find('.edit_product_quantity').val());
         var subtotal = makeTotalProductCaculation($(elm).find('.edit_product_quantity').val(), price);
         $(elm).find('.total_product').html(formatCurrency(subtotal, currency_format, currency_sign, currency_blank));
       }
     });
 
-    var total = makeTotalProductCaculation(qty, price);
+    total = makeTotalProductCaculation(qty, price);
     element.find('td.total_product').html(formatCurrency(total, currency_format, currency_sign, currency_blank));
     element.find('td.productQuantity').html(qty);
   }
   else {
-    var total = makeTotalProductCaculation(quantity, price);
+    total = makeTotalProductCaculation(quantity, price);
     element.find('td.total_product').html(formatCurrency(total, currency_format, currency_sign, currency_blank));
   }
 
 }
 
 function makeTotalProductCaculation(quantity, price) {
-  return parseFloat((quantity * price).toFixed(priceDatabasePrecision));
+  return Number.parseFloat((quantity * price).toFixed(priceDatabasePrecision));
 }
 
 function addViewOrderDetailRow(view) {
@@ -300,7 +301,7 @@ function updateAmounts(order) {
   });
   $('.alert').slideDown('slow');
   $('#product_number').fadeOut('slow', function () {
-    var oldQuantity = parseInt($(this).html(), 10);
+    var oldQuantity = Number.parseInt($(this).html(), 10);
     $(this).html(oldQuantity + 1);
     $(this).fadeIn('slow');
   });
@@ -387,7 +388,7 @@ function init() {
       },
       parse: function (data) {
         var products = []
-        if (typeof data.products !== 'undefined') {
+        if (data.products !== undefined) {
           for (var i = 0; i < data.products.length; i += 1) {
             products[i] = { data: data.products[i], value: data.products[i].name };
           }
@@ -479,11 +480,11 @@ function init() {
 
   $('input#add_product_product_quantity').unbind('keyup').keyup(function () {
     if (window.stock_management) {
-      var quantity = parseInt($(this).val(), 10);
-      if (quantity < 1 || isNaN(quantity)) {
+      var quantity = Number.parseInt($(this).val(), 10);
+      if (quantity < 1 || Number.isNaN(quantity)) {
         quantity = 1;
       }
-      var stockAvailable = parseInt($('#add_product_product_stock').html(), 10);
+      var stockAvailable = Number.parseInt($('#add_product_product_stock').html(), 10);
       // stock status update
       if (quantity > stockAvailable) {
         $('#add_product_product_stock').css('font-weight', 'bold').css('color', 'red').css('font-size', '1.2em');
@@ -511,7 +512,7 @@ function init() {
     }
 
     if (go) {
-      if (parseInt($('input#add_product_product_quantity').val(), 10) > parseInt($('#add_product_product_stock').html(), 10)) {
+      if (Number.parseInt($('input#add_product_product_quantity').val(), 10) > Number.parseInt($('#add_product_product_stock').html(), 10)) {
         go = confirm(window.txt_add_product_stock_issue);
       }
 
@@ -594,8 +595,8 @@ function init() {
   });
 
   $('#add_product_product_price_tax_excl').unbind('keyup').keyup(function () {
-    var priceTaxExcl = parseFloat($(this).val());
-    if (priceTaxExcl < 0 || isNaN(priceTaxExcl)) {
+    var priceTaxExcl = Number.parseFloat($(this).val());
+    if (priceTaxExcl < 0 || Number.isNaN(priceTaxExcl)) {
       priceTaxExcl = 0;
     }
 
@@ -609,8 +610,8 @@ function init() {
   });
 
   $('#add_product_product_price_tax_incl').unbind('keyup').keyup(function () {
-    var priceTaxIncl = parseFloat($(this).val());
-    if (priceTaxIncl < 0 || isNaN(priceTaxIncl)) {
+    var priceTaxIncl = Number.parseFloat($(this).val());
+    if (priceTaxIncl < 0 || Number.isNaN(priceTaxIncl)) {
       priceTaxIncl = 0;
     }
 
@@ -758,8 +759,8 @@ function init() {
   });
 
   $('.edit_product_price_tax_excl').unbind('keyup').keyup(function () {
-    var priceTaxExcl = parseFloat($(this).val());
-    if (priceTaxExcl < 0 || isNaN(priceTaxExcl)) {
+    var priceTaxExcl = Number.parseFloat($(this).val());
+    if (priceTaxExcl < 0 || Number.isNaN(priceTaxExcl)) {
       priceTaxExcl = 0;
     }
     var taxRate = (current_product.tax_rate / 100) + 1;
@@ -773,8 +774,8 @@ function init() {
   $('.edit_product_price_tax_incl')
     .unbind('keyup')
     .keyup(function () {
-    var priceTaxIncl = parseFloat($(this).val());
-    if (priceTaxIncl < 0 || isNaN(priceTaxIncl)) {
+    var priceTaxIncl = Number.parseFloat($(this).val());
+    if (priceTaxIncl < 0 || Number.isNaN(priceTaxIncl)) {
       priceTaxIncl = 0;
     }
 
@@ -788,11 +789,6 @@ function init() {
 
   $('.edit_product_quantity').unbind('keyup');
   $('.edit_product_quantity').keyup(function () {
-    var quantity = parseInt($(this).val(), 10);
-    if (quantity < 1 || isNaN(quantity)) {
-      quantity = 1;
-    }
-    // var stock_available = parseInt($(this).parent().parent().parent().find('td.product_stock').html());
     // total update
     editProductRefreshTotal($(this));
   });
@@ -853,19 +849,19 @@ function init() {
   });
 
   $('#discount_type').unbind('change').change(function () {
-    if (parseInt($(this).val(), 10) === 1) {
+    if (Number.parseInt($(this).val(), 10) === 1) {
       // Percent type
       $('#discount_value_field').show();
       $('#discount_currency_sign').hide();
       $('#discount_value_help').hide();
       $('#discount_percent_symbol').show();
-    } else if (parseInt($(this).val(), 10) === 2) {
+    } else if (Number.parseInt($(this).val(), 10) === 2) {
       // Amount type
       $('#discount_value_field').show();
       $('#discount_percent_symbol').hide();
       $('#discount_value_help').show();
       $('#discount_currency_sign').show();
-    } else if (parseInt($(this).val(), 10) === 3) {
+    } else if (Number.parseInt($(this).val(), 10) === 3) {
       // Free shipping
       $('#discount_value_field').hide();
     }
@@ -932,8 +928,8 @@ $(document).ready(function () {
 });
 
 function checkPartialRefundProductQuantity(it) {
-  var entered = parseInt($(it).val());
-  var max = parseInt($(it).next().text().match(/\d+/)[0], 10);
+  var entered = Number.parseInt($(it).val());
+  var max = Number.parseInt($(it).next().text().match(/\d+/)[0], 10);
   if (entered > max) {
     $(it).val(max);
   }
@@ -943,7 +939,7 @@ function checkPartialRefundProductQuantity(it) {
 }
 
 function checkPartialRefundProductAmount(it) {
-  // TODO: find a way to restore the limit
+  // The amount limit will be restored once the refund calculation is finalised.
   if (window.order_discount_price) {
     actualizeRefundVoucher();
   }
@@ -952,11 +948,11 @@ function checkPartialRefundProductAmount(it) {
 function actualizeRefundVoucher() {
   var total = 0.0;
   $('.edit_product_price_tax_incl.edit_product_price').each(function () {
-    window.quantity_refund_product = parseFloat($(this).closest('td').parent().find('td.partial_refund_fields.current-edit').find('input[onchange="checkPartialRefundProductQuantity(this)"]').val());
+    window.quantity_refund_product = Number.parseFloat($(this).closest('td').parent().find('td.partial_refund_fields.current-edit').find('input[onchange="checkPartialRefundProductQuantity(this)"]').val());
     if (window.quantity_refund_product > 0) {
-      window.current_amount = parseFloat($(this).closest('td').parent().find('td.partial_refund_fields.current-edit').find('input[onchange="checkPartialRefundProductAmount(this)"]').val()) ?
-        parseFloat($(this).closest('td').parent().find('td.partial_refund_fields.current-edit').find('input[onchange="checkPartialRefundProductAmount(this)"]').val())
-        : parseFloat($(this).val());
+      window.current_amount = Number.parseFloat($(this).closest('td').parent().find('td.partial_refund_fields.current-edit').find('input[onchange="checkPartialRefundProductAmount(this)"]').val()) ?
+        Number.parseFloat($(this).closest('td').parent().find('td.partial_refund_fields.current-edit').find('input[onchange="checkPartialRefundProductAmount(this)"]').val())
+        : Number.parseFloat($(this).val());
       total += window.current_amount * window.quantity_refund_product;
     }
   });
@@ -964,7 +960,7 @@ function actualizeRefundVoucher() {
   $('#lab_refund_1').append('<span id="total_refund_1">' + formatCurrency(total, window.currency_format, window.currency_sign, window.currency_blank) + '</span>');
   $('#lab_refund_1').append('<input type="hidden" name="order_discount_price" value=' + window.order_discount_price + '/>');
   $('#total_refund_2').remove();
-  if (parseFloat(total - window.order_discount_price) > 0.0) {
+  if (Number.parseFloat(total - window.order_discount_price) > 0.0) {
     document.getElementById('refund_2').disabled = false;
     $('#lab_refund_2').append('<span id="total_refund_2">' + formatCurrency((total - window.order_discount_price), window.currency_format, window.currency_sign, window.currency_blank) + '</span>');
   } else {
@@ -979,8 +975,8 @@ function actualizeRefundVoucher() {
 function actualizeTotalRefundVoucher() {
   var total = 0.0;
   $('.edit_product_price_tax_incl.edit_product_price').each(function () {
-    window.quantity_refund_product = parseFloat($(this).closest('td').parent().find('td.cancelQuantity').children().val());
-    if (typeof window.quantity_refund_product !== 'undefined' && window.quantity_refund_product > 0) {
+    window.quantity_refund_product = Number.parseFloat($(this).closest('td').parent().find('td.cancelQuantity').children().val());
+    if (window.quantity_refund_product !== undefined && window.quantity_refund_product > 0) {
       total += $(this).val() * window.quantity_refund_product;
     }
   });
@@ -988,7 +984,7 @@ function actualizeTotalRefundVoucher() {
   $('#lab_refund_total_1').append('<span id="total_refund_1">' + formatCurrency(total, window.currency_format, window.currency_sign, window.currency_blank) + '</span>');
   $('#lab_refund_total_1').append('<input type="hidden" name="order_discount_price" value=' + window.order_discount_price + '/>');
   $('#total_refund_2').remove();
-  if (parseFloat(total - window.order_discount_price) > 0.0) {
+  if (Number.parseFloat(total - window.order_discount_price) > 0.0) {
     document.getElementById('refund_total_2').disabled = false;
     $('#lab_refund_total_2').append('<span id="total_refund_2">' + formatCurrency((total - window.order_discount_price), window.currency_format, window.currency_sign, window.currency_blank) + '</span>');
   }
@@ -1010,7 +1006,7 @@ function setCancelQuantity(itself, idOrderDetail, quantity) {
 
 function checkTotalRefundProductQuantity(it) {
   $(it).parent().parent().find('td.cancelCheck input[type=checkbox]').attr('checked', true);
-  if (parseInt($(it).val(), 10) > parseInt($(it).closest('td').find('.partialRefundProductQuantity').val(), 10)) {
+  if (Number.parseInt($(it).val(), 10) > Number.parseInt($(it).closest('td').find('.partialRefundProductQuantity').val(), 10)) {
     $(it).val($(it).closest('td').find('.partialRefundProductQuantity').val());
   }
   if (window.order_discount_price) {

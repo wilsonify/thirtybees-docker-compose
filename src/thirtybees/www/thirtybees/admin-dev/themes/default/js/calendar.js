@@ -1,156 +1,158 @@
-Date.prototype.addDays = function(value) {
-	this.setDate(this.getDate() + value);
+Object.assign(Date.prototype, {
+	addDays: function(value) {
+		this.setDate(this.getDate() + value);
 
-	return this;
-};
+		return this;
+	},
 
-Date.prototype.addMonths = function(value) {
-	var date = this.getDate();
-	this.setMonth(this.getMonth() + value);
+	addMonths: function(value) {
+		var date = this.getDate();
+		this.setMonth(this.getMonth() + value);
 
-	if (this.getDate() < date) {
-		this.setDate(0);
+		if (this.getDate() < date) {
+			this.setDate(0);
+		}
+
+		return this;
+	},
+
+	addWeeks: function(value) {
+		this.addDays(value * 7);
+
+		return this;
+	},
+
+	addYears: function(value) {
+		var month = this.getMonth();
+		this.setFullYear(this.getFullYear() + value);
+
+		if (month < this.getMonth()) {
+			this.setDate(0);
+		}
+
+		return this;
+	},
+
+	subDays: function(value) {
+		this.setDate(this.getDate() - value);
+
+		return this;
+	},
+
+	subMonths: function(value) {
+		var date = this.getDate();
+		this.setMonth(this.getMonth() - value);
+
+		if (this.getDate() < date) {
+			this.setDate(0);
+		}
+
+		return this;
+	},
+
+	subWeeks: function(value) {
+		this.subDays(value * 7);
+
+		return this;
+	},
+
+	subYears: function(value) {
+		var month = this.getMonth();
+		this.setFullYear(this.getFullYear() - value);
+
+		if (month < this.getMonth()) {
+			this.setDate(0);
+		}
+
+		return this;
+	},
+
+	format: function(format) {
+		if (format === undefined)
+			return this.toString();
+
+		var formatSeparator = format.match(/[.\-\s]/);
+		var formatParts     = format.split(/\W+/);
+		var result          = '';
+
+		for (var i=0; i<=formatParts.length; i++) {
+			switch(formatParts[i]) {
+				case 'd':
+				case 'j':
+				result += this.getDate() + formatSeparator;
+				break;
+
+				case 'dd':
+				result += (this.getDate() < 10 ? '0' : '')+this.getDate() + formatSeparator;
+				break;
+
+				case 'm':
+				result += (this.getMonth() + 1) + formatSeparator;
+				break;
+
+				case 'mm':
+				result += (this.getMonth() < 9 ? '0' : '')+(this.getMonth() + 1) + formatSeparator;
+				break;
+
+				case 'yy':
+				case 'y':
+				result += this.getFullYear() + formatSeparator;
+				break;
+
+				case 'yyyy':
+				case 'Y':
+				result += this.getFullYear() + formatSeparator;
+				break;
+			}
+		}
+
+		return result.slice(0, -1);
 	}
-
-	return this;
-};
-
-Date.prototype.addWeeks = function(value) {
-	this.addDays(value * 7);
-
-	return this;
-};
-
-Date.prototype.addYears = function(value) {
-	var month = this.getMonth();
-	this.setFullYear(this.getFullYear() + value);
-
-	if (month < this.getMonth()) {
-		this.setDate(0);
-	}
-
-	return this;
-};
+});
 
 Date.parseDate = function(date, format) {
 	if (format === undefined)
 		format = 'Y-m-d';
 
-	var formatSeparator = format.match(/[.\/\-\s].*?/);
+	var formatSeparator = format.match(/[.\-\s]/);
 	var formatParts     = format.split(/\W+/);
 	var parts           = date.split(formatSeparator);
-	var date            = new Date();
+	var parsedDate      = new Date();
 
 	if (parts.length === formatParts.length) {
-		date.setHours(0);
-		date.setMinutes(0);
-		date.setSeconds(0);
-		date.setMilliseconds(0);
+		parsedDate.setHours(0);
+		parsedDate.setMinutes(0);
+		parsedDate.setSeconds(0);
+		parsedDate.setMilliseconds(0);
 
 		for (var i=0; i<=formatParts.length; i++) {
 			switch(formatParts[i]) {
 				case 'dd':
 				case 'd':
 				case 'j':
-				date.setDate(parseInt(parts[i], 10)||1);
+				parsedDate.setDate(Number.parseInt(parts[i], 10)||1);
 				break;
 
 				case 'mm':
 				case 'm':
-				date.setMonth((parseInt(parts[i], 10)||1) - 1);
+				parsedDate.setMonth((Number.parseInt(parts[i], 10)||1) - 1);
 				break;
 
 				case 'yy':
 				case 'y':
-				date.setFullYear(2000 + (parseInt(parts[i], 10)||1));
+				parsedDate.setFullYear(2000 + (Number.parseInt(parts[i], 10)||1));
 				break;
 
 				case 'yyyy':
 				case 'Y':
-				date.setFullYear(parseInt(parts[i], 10)||1);
+				parsedDate.setFullYear(Number.parseInt(parts[i], 10)||1);
 				break;
 			}
 		}
 	}
 
-	return date;
+	return parsedDate;
 };
-
-Date.prototype.subDays = function(value) {
-	this.setDate(this.getDate() - value);
-
-	return this;
-};
-
-Date.prototype.subMonths = function(value) {
-	var date = this.getDate();
-	this.setMonth(this.getMonth() - value);
-
-	if (this.getDate() < date) {
-		this.setDate(0);
-	}
-
-	return this;
-};
-
-Date.prototype.subWeeks = function(value) {
-	this.subDays(value * 7);
-
-	return this;
-};
-
-Date.prototype.subYears = function(value) {
-	var month = this.getMonth();
-	this.setFullYear(this.getFullYear() - value);
-
-	if (month < this.getMonth()) {
-		this.setDate(0);
-	}
-
-	return this;
-};
-
-Date.prototype.format = function(format) {
-	if (format === undefined)
-		return this.toString();
-
-	var formatSeparator = format.match(/[.\/\-\s].*?/);
-	var formatParts     = format.split(/\W+/);
-	var result          = '';
-
-	for (var i=0; i<=formatParts.length; i++) {
-		switch(formatParts[i]) {
-			case 'd':
-			case 'j':
-			result += this.getDate() + formatSeparator;
-			break;
-
-			case 'dd':
-			result += (this.getDate() < 10 ? '0' : '')+this.getDate() + formatSeparator;
-			break;
-
-			case 'm':
-			result += (this.getMonth() + 1) + formatSeparator;
-			break;
-
-			case 'mm':
-			result += (this.getMonth() < 9 ? '0' : '')+(this.getMonth() + 1) + formatSeparator;
-			break;
-
-			case 'yy':
-			case 'y':
-			result += this.getFullYear() + formatSeparator;
-			break;
-
-			case 'yyyy':
-			case 'Y':
-			result += this.getFullYear() + formatSeparator;
-			break;
-		}
-	}
-
-	return result.slice(0, -1);
-}
 
 function updatePickerFromInput() {
 	datepickerStart.setStart($("#date-start").val());
@@ -387,7 +389,7 @@ $( document ).ready(function() {
 
 	if ($('#datepicker-compare').attr("checked"))
 	{
-		if ($("#date-start-compare").val().replace(/^\s+|\s+$/g, '').length == 0)
+		if ($("#date-start-compare").val().trim().length == 0)
 			$('#compare-options').trigger('change');
 
 		datepickerStart.setStartCompare($("#date-start-compare").val());
@@ -409,27 +411,27 @@ $( document ).ready(function() {
 	});
 
 	$('.submitDateDay').on('click',function(e){
-		e.preventDefault;
+		e.preventDefault();
 		setDayPeriod();
 	});
 	$('.submitDateMonth').on('click',function(e){
-		e.preventDefault;
+		e.preventDefault();
 		setMonthPeriod()
 	});
 	$('.submitDateYear').on('click',function(e){
-		e.preventDefault;
+		e.preventDefault();
 		setYearPeriod();
 	});
 	$('.submitDateDayPrev').on('click',function(e){
-		e.preventDefault;
+		e.preventDefault();
 		setPreviousDayPeriod();
 	});
 	$('.submitDateMonthPrev').on('click',function(e){
-		e.preventDefault;
+		e.preventDefault();
 		setPreviousMonthPeriod();
 	});
 	$('.submitDateYearPrev').on('click',function(e){
-		e.preventDefault;
+		e.preventDefault();
 		setPreviousYearPeriod();
 	});
 });

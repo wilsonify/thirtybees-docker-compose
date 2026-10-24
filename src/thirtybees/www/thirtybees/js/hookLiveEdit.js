@@ -101,7 +101,6 @@ $(document).ready(function() {
 				else
 				{
 					old_target = event.target.id;
-					var cancelMove = old_target;
 					if (new_target_id == '')
 						new_target_id = old_target;
 					var ids = $(ui.item[0]).attr('id').split('_');
@@ -114,7 +113,7 @@ $(document).ready(function() {
 			change: function(evartent, ui) {
 				new_target_id = $(ui.placeholder).parent().attr('id');
 				var ids = ui.item[0].id.split('_');
-				if ($.inArray(ids[5], hookable_list[new_target_id]) != -1) {
+				if (hookable_list[new_target_id].includes(ids[5])) {
 					cancel = false;
 					ui.placeholder.css({
 						visibility: 'visible',
@@ -191,8 +190,8 @@ function getHookableModuleList(hook) {
         },
         success: function(jsonData) {
             var select = '<select id="select_module">';
-            for (var i = 0; i < jsonData.length; i++) {
-                select += '<option value="' + jsonData[i].id + '">' + jsonData[i].name + '</option>';
+            for (const module of jsonData) {
+                select += '<option value="' + module.id + '">' + module.name + '</option>';
             }
             select += '</select>';
             $("#live_edit_feedback_str").html('<div style="padding:10px">' + select + '<br><br><a style="margin:auto" class="button" href="#" >' + add + '</a><br><br><a style="margin:auto" class="button" href="#" onclick="closeFancybox();">' + cancel + '</a>');
@@ -220,9 +219,8 @@ function saveModulePosition()
 	            var ids = $(this).attr('id').split('_');
 	            $("#liveEdit-action-form").append('<input class="dynamic-input-save-position" type="hidden" name="hook[' + ids[1] + '][]" value="' + ids[3] + '" />');
 	        });
-		}
-		else if (typeof($('#' + hooks_list[i]).data('id')) !== 'undefined' && !$('input[name="hook[' + i + ']"]').length)
-	            	$("#liveEdit-action-form").append('<input class="dynamic-input-save-position" type="hidden" name="hook[' + parseInt($('#' + hooks_list[i]).data('id')) + '][0]" value="0" />');
+		}		else if ($('#' + hooks_list[i]).data('id') !== undefined && !$('input[name="hook[' + i + ']"]').length)
+            	$("#liveEdit-action-form").append('<input class="dynamic-input-save-position" type="hidden" name="hook[' + Number.parseInt($('#' + hooks_list[i]).data('id')) + '][0]" value="0" />');
     }
 	$("#liveEdit-action-form").append('<input class="dynamic-input-save-position" type="hidden" name="saveHook" value="1" />');
 	var datas = $("#liveEdit-action-form").serializeArray();
@@ -266,7 +264,7 @@ function hideFeedback()
 
 function get(name)
 {
-	var regexS = "[\\?&]" + name + "=([^&#]*)";
+	var regexS = "[?&]" + name + "=([^&#]*)";
 	var regex = new RegExp(regexS);
 	var results = regex.exec(window.location.href);
 	if (results == null) {

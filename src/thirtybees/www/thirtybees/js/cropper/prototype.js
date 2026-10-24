@@ -8,16 +8,24 @@
 
 var Prototype = {
   Version: '1.5.0_rc0',
-  ScriptFragment: '(?:<script.*?>)((\n|\r|.)*?)(?:<\/script>)',
+  ScriptFragment: String.raw`(?:<script.*?>)([\s\S]*?)(?:</script>)`,
 
   emptyFunction: function() {},
   K: function(x) {return x}
 }
 
+function executeScript(script) {
+  var scriptElement = document.createElement('script');
+  scriptElement.text = script;
+  var head = document.head || document.getElementsByTagName('head')[0] || document.documentElement;
+  head.appendChild(scriptElement);
+  scriptElement.remove();
+}
+
 var Class = {
   create: function() {
     return function() {
-      this.initialize.apply(this, arguments);
+      this.initialize(...arguments);
     }
   }
 }
@@ -42,19 +50,17 @@ Object.inspect = function(object) {
   }
 }
 
-Function.prototype.bind = function() {
-  var __method = this, args = $A(arguments), object = args.shift();
-  return function() {
-    return __method.apply(object, args.concat($A(arguments)));
-  }
-}
+Object.assign(Function.prototype, {
+  bind: function(context) {
+    var args = $A(arguments);
+    args.shift();
+    return (...callArgs) => this.call(context, ...args, ...callArgs);
+  },
 
-Function.prototype.bindAsEventListener = function(object) {
-  var __method = this;
-  return function(event) {
-    return __method.call(object, event || window.event);
+  bindAsEventListener: function(object) {
+    return event => this.call(object, event);
   }
-}
+});
 
 Object.extend(Number.prototype, {
   toColorPart: function() {
@@ -77,12 +83,13 @@ var Try = {
   these: function() {
     var returnValue;
 
-    for (var i = 0; i < arguments.length; i++) {
-      var lambda = arguments[i];
+    for (const lambda of arguments) {
       try {
         returnValue = lambda();
         break;
-      } catch (e) {}
+      } catch (e) {
+        // Try the next candidate.
+      }
     }
 
     return returnValue;
@@ -118,16 +125,18 @@ PeriodicalExecuter.prototype = {
 }
 Object.extend(String.prototype, {
   gsub: function(pattern, replacement) {
-    var result = '', source = this, match;
-    replacement = arguments.callee.prepareReplacement(replacement);
+    var result = '', remaining = this.toString(), match;
+    replacement = String.prototype.gsub.prepareReplacement(replacement);
 
-    while (source.length > 0) {
-      if (match = source.match(pattern)) {
-        result += source.slice(0, match.index);
+    while (remaining.length > 0) {
+      match = remaining.match(pattern);
+      if (match) {
+        result += remaining.slice(0, match.index);
         result += (replacement(match) || '').toString();
-        source  = source.slice(match.index + match[0].length);
+        remaining = remaining.slice(match.index + match[0].length);
       } else {
-        result += source, source = '';
+        result += remaining;
+        remaining = '';
       }
     }
     return result;
@@ -156,11 +165,11 @@ Object.extend(String.prototype, {
   },
 
   strip: function() {
-    return this.replace(/^\s+/, '').replace(/\s+$/, '');
+    return this.trim();
   },
 
   stripTags: function() {
-    return this.replace(/<\/?[^>]+>/gi, '');
+    return this.replace(/<[^>]{0,10000}>/g, '');
   },
 
   stripScripts: function() {
@@ -176,7 +185,7 @@ Object.extend(String.prototype, {
   },
 
   evalScripts: function() {
-    return this.extractScripts().map(function(script) { return eval(script) });
+    return this.extractScripts().map(function(script) { return executeScript(script) });
   },
 
   escapeHTML: function() {
@@ -222,7 +231,8 @@ Object.extend(String.prototype, {
   },
 
   inspect: function() {
-    return "'" + this.replace(/\\/g, '\\\\').replace(/'/g, '\\\'') + "'";
+    var backslash = String.fromCodePoint(92);
+    return "'" + this.replaceAll(backslash, backslash + backslash).replaceAll("'", backslash + "'") + "'";
   }
 });
 
@@ -232,7 +242,7 @@ String.prototype.gsub.prepareReplacement = function(replacement) {
   return function(match) { return template.evaluate(match) };
 }
 
-String.prototype.parseQuery = String.prototype.toQueryParams;
+Object.assign(String.prototype, {parseQuery: String.prototype.toQueryParams});
 
 var Template = Class.create();
 Template.Pattern = /(^|.|\r|\n)(#\{(.*?)\})/;
@@ -282,7 +292,8 @@ var Enumerable = {
   any: function(iterator) {
     var result = true;
     this.each(function(value, index) {
-      if (result = !!(iterator || Prototype.K)(value, index))
+      result = !!(iterator || Prototype.K)(value, index);
+      if (result)
         throw $break;
     });
     return result;
@@ -347,7 +358,7 @@ var Enumerable = {
   invoke: function(method) {
     var args = $A(arguments).slice(1);
     return this.collect(function(value) {
-      return value[method].apply(value, args);
+      return value[method](...args);
     });
   },
 
@@ -402,7 +413,9 @@ var Enumerable = {
       return {value: value, criteria: iterator(value, index)};
     }).sort(function(left, right) {
       var a = left.criteria, b = right.criteria;
-      return a < b ? -1 : a > b ? 1 : 0;
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
     }).pluck('value');
   },
 
@@ -439,8 +452,8 @@ var $A = Array.from = function(iterable) {
     return iterable.toArray();
   } else {
     var results = [];
-    for (var i = 0; i < iterable.length; i++)
-      results.push(iterable[i]);
+    for (const item of iterable)
+      results.push(item);
     return results;
   }
 }
@@ -448,7 +461,7 @@ var $A = Array.from = function(iterable) {
 Object.extend(Array.prototype, Enumerable);
 
 if (!Array.prototype._reverse)
-  Array.prototype._reverse = Array.prototype.reverse;
+  Object.assign(Array.prototype, {_reverse: Array.prototype.reverse});
 
 Object.extend(Array.prototype, {
   _each: function(iterator) {
@@ -477,7 +490,7 @@ Object.extend(Array.prototype, {
 
   flatten: function() {
     return this.inject([], function(array, value) {
-      return array.concat(value && value.constructor == Array ?
+      return array.concat(value?.constructor == Array ?
         value.flatten() : [value]);
     });
   },
@@ -612,7 +625,7 @@ Ajax.Responders = {
     this.each(function(responder) {
       if (responder[callback] && typeof responder[callback] == 'function') {
         try {
-          responder[callback].apply(responder, [request, transport, json]);
+          responder[callback](request, transport, json);
         } catch (e) {}
       }
     });
@@ -712,7 +725,7 @@ Ajax.Request.prototype = Object.extend(new Ajax.Base(), {
     }
 
     if (this.options.requestHeaders)
-      requestHeaders.push.apply(requestHeaders, this.options.requestHeaders);
+      requestHeaders.push(...this.options.requestHeaders);
 
     for (var i = 0; i < requestHeaders.length; i += 2)
       this.transport.setRequestHeader(requestHeaders[i], requestHeaders[i+1]);
@@ -732,13 +745,15 @@ Ajax.Request.prototype = Object.extend(new Ajax.Base(), {
 
   evalJSON: function() {
     try {
-      return eval('(' + this.header('X-JSON') + ')');
-    } catch (e) {}
+      return JSON.parse(this.header('X-JSON'));
+    } catch (e) {
+      return undefined;
+    }
   },
 
   evalResponse: function() {
     try {
-      return eval(this.transport.responseText);
+      executeScript(this.transport.responseText);
     } catch (e) {
       this.dispatchException(e);
     }
@@ -802,8 +817,12 @@ Object.extend(Object.extend(Ajax.Updater.prototype, Ajax.Request.prototype), {
   },
 
   updateContent: function() {
-    var receiver = this.responseIsSuccess() ?
-      this.containers.success : this.containers.failure;
+    var receiver;
+    if (this.responseIsSuccess()) {
+      receiver = this.containers.success;
+    } else {
+      receiver = this.containers.failure;
+    }
     var response = this.transport.responseText;
 
     if (!this.options.evalScripts)
@@ -811,7 +830,7 @@ Object.extend(Object.extend(Ajax.Updater.prototype, Ajax.Request.prototype), {
 
     if (receiver) {
       if (this.options.insertion) {
-        new this.options.insertion(receiver, response);
+        Reflect.construct(this.options.insertion, [receiver, response]);
       } else {
         Element.update(receiver, response);
       }
@@ -868,8 +887,8 @@ Ajax.PeriodicalUpdater.prototype = Object.extend(new Ajax.Base(), {
 });
 function $() {
   var results = [], element;
-  for (var i = 0; i < arguments.length; i++) {
-    element = arguments[i];
+  for (const argument of arguments) {
+    element = argument;
     if (typeof element == 'string')
       element = document.getElementById(element);
     results.push(Element.extend(element));
@@ -880,7 +899,7 @@ function $() {
 document.getElementsByClassName = function(className, parentElement) {
   var children = ($(parentElement) || document.body).getElementsByTagName('*');
   return $A(children).inject([], function(elements, child) {
-    if (child.className.match(new RegExp("(^|\\s)" + className + "(\\s|$)")))
+    if (child.className.match(new RegExp(String.raw`(^|\s)` + className + String.raw`(\s|$)`)))
       elements.push(Element.extend(child));
     return elements;
   });
@@ -910,9 +929,12 @@ Element.extend = function(element) {
 
 Element.extend.cache = {
   findOrStore: function(value) {
-    return this[value] = this[value] || function() {
-      return value.apply(null, [this].concat($A(arguments)));
+    if (!this[value]) {
+      this[value] = function() {
+        return value(this, ...$A(arguments));
+      }
     }
+    return this[value];
   }
 }
 
@@ -922,29 +944,29 @@ Element.Methods = {
   },
 
   toggle: function() {
-    for (var i = 0; i < arguments.length; i++) {
-      var element = $(arguments[i]);
+    for (const argument of arguments) {
+      var element = $(argument);
       Element[Element.visible(element) ? 'hide' : 'show'](element);
     }
   },
 
   hide: function() {
-    for (var i = 0; i < arguments.length; i++) {
-      var element = $(arguments[i]);
+    for (const argument of arguments) {
+      var element = $(argument);
       element.style.display = 'none';
     }
   },
 
   show: function() {
-    for (var i = 0; i < arguments.length; i++) {
-      var element = $(arguments[i]);
+    for (const argument of arguments) {
+      var element = $(argument);
       element.style.display = '';
     }
   },
 
   remove: function(element) {
     element = $(element);
-    element.parentNode.removeChild(element);
+    element.remove();
   },
 
   update: function(element, html) {
@@ -975,25 +997,27 @@ Element.Methods = {
   },
 
   hasClassName: function(element, className) {
-    if (!(element = $(element))) return;
+    element = $(element);
+    if (!element) return;
     return Element.classNames(element).include(className);
   },
 
   addClassName: function(element, className) {
-    if (!(element = $(element))) return;
+    element = $(element);
+    if (!element) return;
     return Element.classNames(element).add(className);
   },
 
   removeClassName: function(element, className) {
-    if (!(element = $(element))) return;
+    element = $(element);
+    if (!element) return;
     return Element.classNames(element).remove(className);
   },
 
   // removes whitespace-only text node children
   cleanWhitespace: function(element) {
     element = $(element);
-    for (var i = 0; i < element.childNodes.length; i++) {
-      var node = element.childNodes[i];
+    for (const node of Array.from(element.childNodes)) {
       if (node.nodeType == 3 && !/\S/.test(node.nodeValue))
         Element.remove(node);
     }
@@ -1004,9 +1028,12 @@ Element.Methods = {
   },
 
   childOf: function(element, ancestor) {
-    element = $(element), ancestor = $(ancestor);
-    while (element = element.parentNode)
+    element = $(element);
+    ancestor = $(ancestor);
+    while (element.parentNode) {
+      element = element.parentNode;
       if (element == ancestor) return true;
+    }
     return false;
   },
 
@@ -1021,7 +1048,7 @@ Element.Methods = {
     element = $(element);
     var value = element.style[style.camelize()];
     if (!value) {
-      if (document.defaultView && document.defaultView.getComputedStyle) {
+      if (document.defaultView?.getComputedStyle) {
         var css = document.defaultView.getComputedStyle(element, null);
         value = css ? css.getPropertyValue(style) : null;
       } else if (element.currentStyle) {
@@ -1109,18 +1136,19 @@ Object.extend(Element, Element.Methods);
 
 var _nativeExtensions = false;
 
+var HTMLElement;
 if(!HTMLElement && /Konqueror|Safari|KHTML/.test(navigator.userAgent)) {
-  var HTMLElement = {}
-  HTMLElement.prototype = document.createElement('div').__proto__;
+  HTMLElement = {};
+  HTMLElement.prototype = Object.getPrototypeOf(document.createElement('div'));
 }
 
 Element.addMethods = function(methods) {
   Object.extend(Element.Methods, methods || {});
 
-  if(typeof HTMLElement != 'undefined') {
-    var methods = Element.Methods, cache = Element.extend.cache;
-    for (var property in methods) {
-      var value = methods[property];
+  if(HTMLElement !== undefined) {
+    var availableMethods = Element.Methods, cache = Element.extend.cache;
+    for (var property in availableMethods) {
+      var value = availableMethods[property];
       if (typeof value == 'function')
         HTMLElement.prototype[property] = cache.findOrStore(value);
     }
@@ -1264,6 +1292,48 @@ Element.ClassNames.prototype = {
 }
 
 Object.extend(Element.ClassNames.prototype, Enumerable);
+
+function abortSelector(message) {
+  throw new Error('Parse error in selector: ' + message);
+}
+
+function matchesAttribute(value, attribute) {
+  switch (attribute.operator) {
+    case '=':
+      return value == attribute.value;
+    case '~=':
+      return Boolean(value?.split(' ').include(attribute.value));
+    case '|=':
+      return Boolean(value && value.split('-').first().toUpperCase() == attribute.value.toUpperCase());
+    case '!=':
+      return value != attribute.value;
+    case '':
+    case undefined:
+      return value != null;
+    default:
+      throw new Error('Unknown operator ' + attribute.operator + ' in selector');
+  }
+}
+
+function matchesAttributes(element, attributes) {
+  for (const attribute of attributes) {
+    if (!matchesAttribute(element.getAttribute(attribute.name), attribute)) return false;
+  }
+  return true;
+}
+
+function matchesSelector(element, params) {
+  if (!element.tagName) return false;
+  if (params.id && element.id != params.id) return false;
+  if (params.tagName && element.tagName.toUpperCase() != params.tagName) return false;
+
+  for (const className of params.classNames) {
+    if (!Element.hasClassName(element, className)) return false;
+  }
+
+  return !params.attributes || matchesAttributes(element, params.attributes);
+}
+
 var Selector = Class.create();
 Selector.prototype = {
   initialize: function(expression) {
@@ -1274,89 +1344,61 @@ Selector.prototype = {
   },
 
   parseExpression: function() {
-    function abort(message) { throw 'Parse error in selector: ' + message; }
-
-    if (this.expression == '')  abort('empty expression');
+    if (this.expression == '')  abortSelector('empty expression');
 
     var params = this.params, expr = this.expression, match, modifier, clause, rest;
-    while (match = expr.match(/^(.*)\[([a-z0-9_:-]+?)(?:([~\|!]?=)(?:"([^"]*)"|([^\]\s]*)))?\]$/i)) {
+    match = expr.match(/^(.*)\[([a-z0-9_:-]+?)(?:([~|!]?=)(?:"([^"]*)"|([^\]\s]*)))?\]$/i);
+    while (match) {
       params.attributes = params.attributes || [];
       params.attributes.push({name: match[2], operator: match[3], value: match[4] || match[5] || ''});
       expr = match[1];
+      match = expr.match(/^(.*)\[([a-z0-9_:-]+?)(?:([~|!]?=)(?:"([^"]*)"|([^\]\s]*)))?\]$/i);
     }
 
-    if (expr == '*') return this.params.wildcard = true;
+    if (expr == '*') {
+      this.params.wildcard = true;
+      return;
+    }
 
-    while (match = expr.match(/^([^a-z0-9_-])?([a-z0-9_-]+)(.*)/i)) {
-      modifier = match[1], clause = match[2], rest = match[3];
+    match = expr.match(/^([^a-z0-9_-])?([a-z0-9_-]+)(.*)/i);
+    while (match) {
+      modifier = match[1];
+      clause = match[2];
+      rest = match[3];
       switch (modifier) {
         case '#':       params.id = clause; break;
         case '.':       params.classNames.push(clause); break;
         case '':
         case undefined: params.tagName = clause.toUpperCase(); break;
-        default:        abort(expr.inspect());
+        default:        abortSelector(expr.inspect());
       }
       expr = rest;
+      match = expr.match(/^([^a-z0-9_-])?([a-z0-9_-]+)(.*)/i);
     }
 
-    if (expr.length > 0) abort(expr.inspect());
-  },
-
-  buildMatchExpression: function() {
-    var params = this.params, conditions = [], clause;
-
-    if (params.wildcard)
-      conditions.push('true');
-    if (clause = params.id)
-      conditions.push('element.id == ' + clause.inspect());
-    if (clause = params.tagName)
-      conditions.push('element.tagName.toUpperCase() == ' + clause.inspect());
-    if ((clause = params.classNames).length > 0)
-      for (var i = 0; i < clause.length; i++)
-        conditions.push('Element.hasClassName(element, ' + clause[i].inspect() + ')');
-    if (clause = params.attributes) {
-      clause.each(function(attribute) {
-        var value = 'element.getAttribute(' + attribute.name.inspect() + ')';
-        var splitValueBy = function(delimiter) {
-          return value + ' && ' + value + '.split(' + delimiter.inspect() + ')';
-        }
-
-        switch (attribute.operator) {
-          case '=':       conditions.push(value + ' == ' + attribute.value.inspect()); break;
-          case '~=':      conditions.push(splitValueBy(' ') + '.include(' + attribute.value.inspect() + ')'); break;
-          case '|=':      conditions.push(
-                            splitValueBy('-') + '.first().toUpperCase() == ' + attribute.value.toUpperCase().inspect()
-                          ); break;
-          case '!=':      conditions.push(value + ' != ' + attribute.value.inspect()); break;
-          case '':
-          case undefined: conditions.push(value + ' != null'); break;
-          default:        throw 'Unknown operator ' + attribute.operator + ' in selector';
-        }
-      });
-    }
-
-    return conditions.join(' && ');
+    if (expr.length > 0) abortSelector(expr.inspect());
   },
 
   compileMatcher: function() {
-    this.match = new Function('element', 'if (!element.tagName) return false; \
-      return ' + this.buildMatchExpression());
+    var params = this.params;
+    this.match = function(element) {
+      return matchesSelector(element, params);
+    };
   },
 
   findElements: function(scope) {
-    var element;
+    var element = this.params.id ? $(this.params.id) : undefined;
 
-    if (element = $(this.params.id))
-      if (this.match(element))
-        if (!scope || Element.childOf(element, scope))
-          return [element];
+    if (element && this.match(element) && (!scope || Element.childOf(element, scope)))
+      return [element];
 
-    scope = (scope || document).getElementsByTagName(this.params.tagName || '*');
+    var elements = (scope || document).getElementsByTagName(this.params.tagName || '*');
 
     var results = [];
-    for (var i = 0; i < scope.length; i++)
-      if (this.match(element = scope[i]))
-        results.push(Element.extend(element));
+    for (const candidate of elements) {
+      if (this.match(candidate))
+        results.push(Element.extend(candidate));
+    }
 
     return results;
   },
@@ -1376,8 +1418,8 @@ function $$() {
 }
 var Field = {
   clear: function() {
-    for (var i = 0; i < arguments.length; i++)
-      $(arguments[i]).value = '';
+    for (const argument of arguments)
+      $(argument).value = '';
   },
 
   focus: function(element) {
@@ -1385,8 +1427,8 @@ var Field = {
   },
 
   present: function() {
-    for (var i = 0; i < arguments.length; i++)
-      if ($(arguments[i]).value == '') return false;
+    for (const argument of arguments)
+      if ($(argument).value == '') return false;
     return true;
   },
 
@@ -1409,8 +1451,8 @@ var Form = {
     var elements = Form.getElements($(form));
     var queryComponents = new Array();
 
-    for (var i = 0; i < elements.length; i++) {
-      var queryComponent = Form.Element.serialize(elements[i]);
+    for (const element of elements) {
+      var queryComponent = Form.Element.serialize(element);
       if (queryComponent)
         queryComponents.push(queryComponent);
     }
@@ -1424,8 +1466,8 @@ var Form = {
 
     for (var tagName in Form.Element.Serializers) {
       var tagElements = form.getElementsByTagName(tagName);
-      for (var j = 0; j < tagElements.length; j++)
-        elements.push(tagElements[j]);
+      for (const tagElement of tagElements)
+        elements.push(tagElement);
     }
     return elements;
   },
@@ -1438,8 +1480,7 @@ var Form = {
       return inputs;
 
     var matchingInputs = new Array();
-    for (var i = 0; i < inputs.length; i++) {
-      var input = inputs[i];
+    for (const input of inputs) {
       if ((typeName && input.type != typeName) ||
           (name && input.name != name))
         continue;
@@ -1451,8 +1492,7 @@ var Form = {
 
   disable: function(form) {
     var elements = Form.getElements(form);
-    for (var i = 0; i < elements.length; i++) {
-      var element = elements[i];
+    for (const element of elements) {
       element.blur();
       element.disabled = 'true';
     }
@@ -1460,8 +1500,7 @@ var Form = {
 
   enable: function(form) {
     var elements = Form.getElements(form);
-    for (var i = 0; i < elements.length; i++) {
-      var element = elements[i];
+    for (const element of elements) {
       element.disabled = '';
     }
   },
@@ -1629,8 +1668,8 @@ Abstract.EventObserver.prototype = {
 
   registerFormCallbacks: function() {
     var elements = Form.getElements(this.element);
-    for (var i = 0; i < elements.length; i++)
-      this.registerCallback(elements[i]);
+    for (const element of elements)
+      this.registerCallback(element);
   },
 
   registerCallback: function(element) {
@@ -1665,8 +1704,9 @@ Form.EventObserver.prototype = Object.extend(new Abstract.EventObserver(), {
     return Form.serialize(this.element);
   }
 });
+var Event;
 if (!window.Event) {
-  var Event = new Object();
+  Event = new Object();
 }
 
 Object.extend(Event, {
@@ -1734,19 +1774,19 @@ Object.extend(Event, {
 
   unloadCache: function() {
     if (!Event.observers) return;
-    for (var i = 0; i < Event.observers.length; i++) {
-      Event.stopObserving.apply(this, Event.observers[i]);
-      Event.observers[i][0] = null;
+    for (const observer of Event.observers) {
+      Event.stopObserving(...observer);
+      observer[0] = null;
     }
     Event.observers = false;
   },
 
   observe: function(element, name, observer, useCapture) {
-    var element = $(element);
+    element = $(element);
     useCapture = useCapture || false;
 
     if (name == 'keypress' &&
-        (navigator.appVersion.match(/Konqueror|Safari|KHTML/)
+        (/Konqueror|Safari|KHTML/.exec(navigator.appVersion)
         || element.attachEvent))
       name = 'keydown';
 
@@ -1754,11 +1794,11 @@ Object.extend(Event, {
   },
 
   stopObserving: function(element, name, observer, useCapture) {
-    var element = $(element);
+    element = $(element);
     useCapture = useCapture || false;
 
     if (name == 'keypress' &&
-        (navigator.appVersion.match(/Konqueror|Safari|KHTML/)
+        (/Konqueror|Safari|KHTML/.exec(navigator.appVersion)
         || element.detachEvent))
       name = 'keydown';
 
@@ -1771,7 +1811,7 @@ Object.extend(Event, {
 });
 
 /* prevent memory leaks in IE */
-if (navigator.appVersion.match(/\bMSIE\b/))
+if (/\bMSIE\b/.exec(navigator.appVersion))
   Event.observe(window, 'unload', Event.unloadCache, false);
 var Position = {
   // set to true if needed, warning: firefox performance problems
@@ -1830,9 +1870,12 @@ var Position = {
     if (element.offsetParent) return element.offsetParent;
     if (element == document.body) return element;
 
-    while ((element = element.parentNode) && element != document.body)
+    element = element.parentNode;
+    while (element && element != document.body) {
       if (Element.getStyle(element, 'position') != 'static')
         return element;
+      element = element.parentNode;
+    }
 
     return document.body;
   },
@@ -1873,17 +1916,6 @@ var Position = {
     if (mode == 'horizontal')
       return ((this.offset[0] + element.offsetWidth) - this.xcomp) /
         element.offsetWidth;
-  },
-
-  clone: function(source, target) {
-    source = $(source);
-    target = $(target);
-    target.style.position = 'absolute';
-    var offsets = this.cumulativeOffset(source);
-    target.style.top    = offsets[1] + 'px';
-    target.style.left   = offsets[0] + 'px';
-    target.style.width  = source.offsetWidth + 'px';
-    target.style.height = source.offsetHeight + 'px';
   },
 
   page: function(forElement) {
@@ -1958,8 +1990,8 @@ var Position = {
     var width   = element.clientWidth;
     var height  = element.clientHeight;
 
-    element._originalLeft   = left - parseFloat(element.style.left  || 0);
-    element._originalTop    = top  - parseFloat(element.style.top || 0);
+    element._originalLeft   = left - Number.parseFloat(element.style.left  || 0);
+    element._originalTop    = top  - Number.parseFloat(element.style.top || 0);
     element._originalWidth  = element.style.width;
     element._originalHeight = element.style.height;
 
@@ -1976,8 +2008,8 @@ var Position = {
     Position.prepare();
 
     element.style.position = 'relative';
-    var top  = parseFloat(element.style.top  || 0) - (element._originalTop || 0);
-    var left = parseFloat(element.style.left || 0) - (element._originalLeft || 0);
+    var top  = Number.parseFloat(element.style.top  || 0) - (element._originalTop || 0);
+    var left = Number.parseFloat(element.style.left || 0) - (element._originalLeft || 0);
 
     element.style.top    = top + 'px';
     element.style.left   = left + 'px';

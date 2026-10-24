@@ -80,13 +80,13 @@ $(document).ready(
 				if (this.running == undefined)
 					this.running = false;
 
-				if (this.running == true)
+				if (this.running)
 					return;
 
 				$('.ajax-message').hide();
 				this.running = true;
 
-				if (typeof(this.restartAllowed) == 'undefined' || this.restartAllowed)
+				if (this.restartAllowed === undefined || this.restartAllowed)
 				{
 					$(this).html(this.legend+translations['in_progress']);
 					$('#indexing-warning').show();
@@ -114,7 +114,6 @@ $(document).ready(
 							$('#ajax-message-ok span').html(translations['attribute_indexation_finished']);
 
 						$('#ajax-message-ok').show();
-						return;
 					},
 					error: function(res)
 					{
@@ -132,7 +131,6 @@ $(document).ready(
 					}
 				}
 			);
-			return;
 		});
 
 		$('.ajaxcall-recurcive').each(
@@ -151,14 +149,14 @@ $(document).ready(
 						if (this.running == undefined)
 							this.running = false;
 
-						if (this.running == true)
+						if (this.running)
 							return false;
 
 						$('.ajax-message').hide();
 
 						this.running = true;
 
-						if (typeof(this.restartAllowed) == 'undefined' || this.restartAllowed)
+						if (this.restartAllowed === undefined || this.restartAllowed)
 						{
 							$(this).html(this.legend+translations['in_progress']);
 							$('#indexing-warning').show();
@@ -185,7 +183,7 @@ $(document).ready(
 									$('#ajax-message-ok').show();
 									return completed;
 								}
-								this.cursor = parseInt(res.cursor);
+								this.cursor = Number.parseInt(res.cursor);
 								$(this).html(this.legend+translations['price_indexation_in_progress'].replace('%s', res.count));
 								$(this).click();
 							},
@@ -202,7 +200,6 @@ $(document).ready(
 							}
 						});
 						return completed;
-						return true;
 					}
 				);
 			}
@@ -222,7 +219,7 @@ $(document).ready(
 		$('.filter_list_item input[type=checkbox]').click(
 			function()
 			{
-				var current_selected_filters_count = parseInt($('#selected_filters').html());
+				var current_selected_filters_count = Number.parseInt($('#selected_filters').html());
 
 				if ($(this).prop('checked'))
 					$('#selected_filters').html(current_selected_filters_count+1);
@@ -231,16 +228,16 @@ $(document).ready(
 			}
 		);
 
-		if (typeof filters !== 'undefined')
+		if (window.filters !== undefined)
 		{
-			var filters = JSON.parse(filters);
+			var parsedFilters = JSON.parse(window.filters);
 
-			for (var filter in filters)
+			for (var filter in parsedFilters)
 			{
 				$('#'+filter).attr("checked","checked");
-				$('#selected_filters').html(parseInt($('#selected_filters').html())+1);
-				$('select[name="'+filter+'_filter_type"]').val(filters[filter].filter_type);
-				$('select[name="'+filter+'_filter_show_limit"]').val(filters[filter].filter_show_limit);
+				$('#selected_filters').html(Number.parseInt($('#selected_filters').html())+1);
+				$('select[name="'+filter+'_filter_type"]').val(parsedFilters[filter].filter_type);
+				$('select[name="'+filter+'_filter_show_limit"]').val(parsedFilters[filter].filter_show_limit);
 			}
 		}
 	}

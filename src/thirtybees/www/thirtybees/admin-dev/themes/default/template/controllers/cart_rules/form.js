@@ -95,13 +95,6 @@ function addCartRuleOption(item)
 
 function updateProductRuleShortDescription(item)
 {
-	/******* For IE: put a product in condition on cart rules *******/
-	if(typeof String.prototype.trim !== 'function') {
-	  String.prototype.trim = function() {
-		return this.replace(/^\s+|\s+$/g, '');
-	  }
-	}
-
 	var id1 = $(item).attr('id').replace('_add', '').replace('_remove', '');
 	var id2 = id1.replace('_select', '');
 	var length = $('#' + id1 + '_2 option').length;
@@ -112,12 +105,13 @@ function updateProductRuleShortDescription(item)
 }
 
 var restrictions = new Array('country', 'carrier', 'group', 'cart_rule', 'shop');
-for (var i in restrictions)
+for (const restriction of restrictions)
 {
-	toggleCartRuleFilter($('#' + restrictions[i] + '_restriction'));
-	$('#' + restrictions[i] + '_restriction').click(function() {toggleCartRuleFilter(this);});
-	$('#' + restrictions[i] + '_select_remove').click(function() {removeCartRuleOption(this);});
-	$('#' + restrictions[i] + '_select_add').click(function() {addCartRuleOption(this);});
+	var restrictionElement = $('#' + restriction + '_restriction');
+	toggleCartRuleFilter(restrictionElement);
+	restrictionElement.click(function() {toggleCartRuleFilter(this);});
+	$('#' + restriction + '_select_remove').click(function() {removeCartRuleOption(this);});
+	$('#' + restriction + '_select_add').click(function() {addCartRuleOption(this);});
 }
 
 toggleCartRuleFilter($('#product_restriction'));
@@ -311,8 +305,8 @@ $('#reductionProductFilter')
 			},
 			parse: function(data) {
 				var mytab = new Array();
-				for (var i = 0; i < data.length; i++)
-					mytab[mytab.length] = { data: data[i], value: (data[i].reference + ' ' + data[i].name).trim() };
+				for (const item of data)
+					mytab[mytab.length] = { data: item, value: (item.reference + ' ' + item.name).trim() };
 				return mytab;
 			},
 			extraParams: {
@@ -341,8 +335,8 @@ $('#customerFilter')
 			},
 			parse: function(data) {
 				var mytab = new Array();
-				for (var i = 0; i < data.length; i++)
-					mytab[mytab.length] = { data: data[i], value: data[i].cname + ' (' + data[i].email + ')' + (data[i].from_shop_name ? ' - ' + data[i].from_shop_name : '' ) };
+				for (const item of data)
+					mytab[mytab.length] = { data: item, value: item.cname + ' (' + item.email + ')' + (item.from_shop_name ? ' - ' + item.from_shop_name : '' ) };
 				return mytab;
 			},
 			extraParams: {
@@ -424,7 +418,7 @@ function searchProducts()
 	$.ajax({
 		type: 'POST',
 		headers: { "cache-control": "no-cache" },
-		url: 'ajax-tab.php' + '?rand=' + new Date().getTime(),
+		url: 'ajax-tab.php' + '?rand=' + Date.now(),
 		async: true,
 		dataType: 'json',
 		data: {
@@ -437,7 +431,6 @@ function searchProducts()
 		{
 			var products_found = '';
 			var attributes_html = '';
-			var stock = {};
 
 			if (res.found)
 			{
