@@ -15,7 +15,7 @@ services:
       MARIADB_ROOT_PASSWORD: root
 
   dbgate:
-    image: dbgate/dbgate:alpine
+    image: dbgate/dbgate:7.3.2-alpine
     restart: unless-stopped
     ports:
       - "31000:3000"

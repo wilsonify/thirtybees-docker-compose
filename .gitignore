@@ -6,3 +6,6 @@ mariadb_backup_*.xml
 *.sql.gz
 *.xml.gz
 .env
+
+# Acquired by src/thirtybees/fetch-thirtybees.sh (pinned upstream release).
+src/thirtybees/www/thirtybees/

@@ -4,7 +4,7 @@ CLUSTER_NAME := thirtybees-prod
 NAMESPACE := thirtybees-prod
 CONTEXT := kind-$(CLUSTER_NAME)
 AGE_PUBLIC_KEY := age1mg4zlx7p736nnrp7glt7gyd96s33kmy8wlck903m0srkkndeaawqrqfzek
-THIRTYBEES_IMAGE := ghcr.io/wilsonify/thirtybees:latest
+THIRTYBEES_IMAGE := ghcr.io/wilsonify/thirtybees:1.0.0
 
 # Default target
 all: cluster-create load-image sops-operator sops-age-secret secret deploy status

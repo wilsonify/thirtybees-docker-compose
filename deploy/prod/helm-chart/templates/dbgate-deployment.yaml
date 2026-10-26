@@ -22,7 +22,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - image: dbgate/dbgate:alpine
+        - image: dbgate/dbgate:7.3.2-alpine
           name: dbgate
           ports:
             - containerPort: 3000
