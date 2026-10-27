@@ -8,7 +8,7 @@ metadata:
     io.kompose.service: mariadb
   name: mariadb
 spec:
-  replicas: 1
+  replicas: {{ .Values.mariadb.replicaCount }}
   selector:
     matchLabels:
       io.kompose.service: mariadb
@@ -24,7 +24,7 @@ spec:
       containers:
         - env:
             - name: MARIADB_DATABASE
-              value: thirtybees
+              value: {{ .Values.mariadb.mariadbDatabase }}
             - name: MARIADB_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -36,8 +36,8 @@ spec:
                   name: mariadb-credentials
                   key: root-password
             - name: MARIADB_USER
-              value: thirtybees
-          image: mariadb:11.4.3
+              value: {{ .Values.mariadb.mariadbUser }}
+          image: {{ .Values.mariadb.image }}
           name: mariadb
           resources:
             requests:

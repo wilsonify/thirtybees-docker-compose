@@ -8,7 +8,7 @@ metadata:
     io.kompose.service: thirtybees
   name: thirtybees
 spec:
-  replicas: 1
+  replicas: {{ .Values.thirtybees.replicaCount }}
   selector:
     matchLabels:
       io.kompose.service: thirtybees
@@ -29,8 +29,8 @@ spec:
                   name: mariadb-credentials
                   key: password
             - name: MARIADB_USER
-              value: thirtybees
-          image: ghcr.io/wilsonify/thirtybees:1.0.0
+              value: {{ .Values.mariadb.mariadbUser }}
+          image: {{ .Values.thirtybees.image }}
           livenessProbe:
             exec:
               command:
@@ -40,7 +40,7 @@ spec:
             timeoutSeconds: 10
           name: thirtybees
           ports:
-            - containerPort: 80
+            - containerPort: {{ .Values.thirtybees.port }}
               protocol: TCP
           resources:
             requests:

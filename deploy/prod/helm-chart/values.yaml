@@ -8,6 +8,12 @@ mariadb:
   mariadbDatabase: thirtybees
   mariadbUser: thirtybees
 
+dbgate:
+  image: "dbgate/dbgate:7.3.2-alpine"
+  replicaCount: 1
+  port: 3000
+  hostPort: 31000
+
 thirtybees:
   image: "ghcr.io/wilsonify/thirtybees:1.0.0"
   replicaCount: 1

@@ -6,11 +6,11 @@ all: deps php down up
 # src/thirtybees/www/thirtybees directory. Re-running this target is cheap
 # when the recorded commit already matches.
 deps:
-	../../src/thirtybees/fetch-thirtybees.sh --if-missing
+	bash ../../src/thirtybees/fetch-thirtybees.sh --if-missing
 
 # Force a fresh fetch after changing the pinned commit or the overlay.
 refresh-deps:
-	../../src/thirtybees/fetch-thirtybees.sh
+	bash ../../src/thirtybees/fetch-thirtybees.sh
 
 php: deps
 	docker build --progress=plain --platform=amd64 --tag "ghcr.io/wilsonify/thirtybees:1.0.0" \

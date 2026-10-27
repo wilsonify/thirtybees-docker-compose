@@ -8,7 +8,7 @@ metadata:
     io.kompose.service: dbgate
   name: dbgate
 spec:
-  replicas: 1
+  replicas: {{ .Values.dbgate.replicaCount }}
   selector:
     matchLabels:
       io.kompose.service: dbgate
@@ -22,10 +22,10 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - image: dbgate/dbgate:7.3.2-alpine
+        - image: {{ .Values.dbgate.image }}
           name: dbgate
           ports:
-            - containerPort: 3000
+            - containerPort: {{ .Values.dbgate.port }}
               protocol: TCP
           resources:
             requests:

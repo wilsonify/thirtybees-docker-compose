@@ -9,8 +9,8 @@ metadata:
   name: thirtybees
 spec:
   ports:
-    - name: "32080"
-      port: 32080
-      targetPort: 80
+    - name: "{{ .Values.thirtybees.hostPort }}"
+      port: {{ .Values.thirtybees.hostPort }}
+      targetPort: {{ .Values.thirtybees.port }}
   selector:
     io.kompose.service: thirtybees

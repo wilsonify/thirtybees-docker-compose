@@ -9,8 +9,8 @@ metadata:
   name: dbgate
 spec:
   ports:
-    - name: "31000"
-      port: 31000
-      targetPort: 3000
+    - name: "{{ .Values.dbgate.hostPort }}"
+      port: {{ .Values.dbgate.hostPort }}
+      targetPort: {{ .Values.dbgate.port }}
   selector:
     io.kompose.service: dbgate

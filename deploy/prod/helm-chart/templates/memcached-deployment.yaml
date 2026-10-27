@@ -8,7 +8,7 @@ metadata:
     io.kompose.service: memcached
   name: memcached
 spec:
-  replicas: 1
+  replicas: {{ .Values.memcached.replicaCount }}
   selector:
     matchLabels:
       io.kompose.service: memcached
@@ -22,7 +22,7 @@ spec:
     spec:
       automountServiceAccountToken: false
       containers:
-        - image: memcached:1.6.29
+        - image: {{ .Values.memcached.image }}
           name: memcached
           resources:
             requests:
