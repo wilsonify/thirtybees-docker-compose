@@ -72,7 +72,7 @@ WORKDIR /var/www/default
 # web-server ownership.
 RUN set -e; \
     test -f install-dev/index_cli.php \
-      || { echo "ThirtyBees source is missing. Run ./fetch-thirtybees.sh before docker build." >&2; exit 1; }; \
+      || { echo "ThirtyBees source is missing. Run bash fetch-thirtybees.sh before docker build." >&2; exit 1; }; \
     rm -f .gitkeep; \
     COMPOSER=composer/php8.3/composer.json composer install --no-dev --no-interaction --prefer-dist; \
     mkdir -p cache log upload download; \

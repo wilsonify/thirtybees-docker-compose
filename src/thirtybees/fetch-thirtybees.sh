@@ -6,7 +6,7 @@
 # immutable upstream commit, and placed in the ignored www/thirtybees directory.
 #
 # Usage:
-#   ./fetch-thirtybees.sh [--if-missing] [destination]
+#   bash fetch-thirtybees.sh [--if-missing] [destination]
 #
 # --if-missing  reuse an existing tree fetched from the same commit
 # Default destination: <this script's directory>/www/thirtybees
