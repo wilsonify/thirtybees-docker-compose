@@ -24,7 +24,7 @@ Without `make`, run the same steps directly:
 
 ```sh
 cd src/thirtybees
-./fetch-thirtybees.sh
+bash fetch-thirtybees.sh
 docker build --platform=amd64 -t ghcr.io/wilsonify/thirtybees:1.0.0 .
 ```
 
